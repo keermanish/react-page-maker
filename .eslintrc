@@ -1,0 +1,20 @@
+{
+  "parser": "babel-eslint",
+  "extends": [
+    "react-app",
+    "airbnb"
+  ],
+  "rules": {
+    "react/jsx-filename-extension": "off",
+    "jsx-a11y/href-no-hash": "off",
+    "comma-dangle": "off",
+    "import/prefer-default-export": "off",
+    "no-plusplus": "off",
+    "no-useless-escape": "off",
+    "no-mixed-operators": "off",
+    "linebreak-style": "off",
+    "react/require-default-props": "off",
+    "no-underscore-dangle": "off",
+    "max-len": "warn"
+  }
+}
