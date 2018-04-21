@@ -2,7 +2,7 @@
   "name": "react-page-maker",
   "version": "1.0.1",
   "description": "A library which will help to generate the page meta data based on the fields, layout, etc dragged-drop. This meta data can be further utilized to generate actual markup.",
-  "main": "./build/index.js",
+  "main": "./dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack --watch",
