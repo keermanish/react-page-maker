@@ -16,26 +16,26 @@ class State {
 
     /**
      * private function to traverse through each node and update the corresponding node
-     * @param {String} canvasID
+     * @param {String} dropzoneID
      * @param {String} parentID
      * @param {Array} updatedFields - new fields/elements
      * @param {Array} fields - fields/elements of current canvas
      * @returns {Boolean}
      */
-    const traverseAndUpdateTree = (canvasID, parentID, updatedFields, fields = state.tree) => {
+    const traverseAndUpdateTree = (dropzoneID, parentID, updatedFields, fields = state.tree) => {
       const matchedParentCanvas = fields.find(field => field.id === parentID);
       let returnStatus = false;
 
       // found element
       if (matchedParentCanvas) {
-        if (canvasID === parentID) {
+        if (dropzoneID === parentID) {
           // first time, create fields
           matchedParentCanvas.fields = updatedFields;
         } else if (!matchedParentCanvas.fields || !updatedFields.length) {
           // user tried to remove elements
-          if (canvasID && matchedParentCanvas.fields) {
+          if (dropzoneID && matchedParentCanvas.fields) {
             matchedParentCanvas.fields = matchedParentCanvas.fields
-              .filter(f => f.canvasID !== canvasID);
+              .filter(f => f.dropzoneID !== dropzoneID);
           } else {
             // matched canvas does not has such field, create one
             matchedParentCanvas.fields = updatedFields;
@@ -69,7 +69,7 @@ class State {
 
           // field has sub-fields, check inside sub-fields
           if (childFields) {
-            status = traverseAndUpdateTree(canvasID, parentID, updatedFields, childFields);
+            status = traverseAndUpdateTree(dropzoneID, parentID, updatedFields, childFields);
           }
 
           if (status) {
@@ -89,8 +89,8 @@ class State {
 
     // function to update state
     // once update done, triggers CB and notifyStateChange
-    this.updateState = (canvasID, parentID, fields, cb = () => {}) => {
-      traverseAndUpdateTree(canvasID, parentID, fields);
+    this.updateState = (dropzoneID, parentID, fields, cb = () => {}) => {
+      traverseAndUpdateTree(dropzoneID, parentID, fields);
       cb(state.tree);
       notifyStateChange();
     };
