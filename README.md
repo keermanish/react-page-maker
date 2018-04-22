@@ -248,6 +248,7 @@ npm install --save react-page-maker
         ```
 
 - **Canvas** (This Component is extended version of Dropzone with some default properties in it)
+
   | Prop        | Type           | Description  |
   | ------------- |:-------------:| -----|
   | initialElements      | Array | Array of element(Object) to be prepopulate inside canvas(), here format will be similar to palette elements |
