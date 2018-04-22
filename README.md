@@ -5,29 +5,29 @@ A react package which will help you to generate the **meta data** based on the s
 
 Library provides feature of Drag and Drop, where you can drag the UI elements/layouts from palette and drop it into appropriate dropzone/canvas.
 
-## Install ##
+# Install #
 ```shell
 npm install --save react-page-maker
 ```
 
-## How to use ##
+# How to use #
 1. Define the type of UI elements/layouts
 2. Create and Register those elements/layouts
 3. Utilise these elements/layouts in Palette
 
 
-- #### Define the type of UI Elements/Layouts ####
-  Every UI element/layout has mandatory `type` property. It helps to render corresponding component.
-  ```Javascript
-  // Const.js
-  export const elements = {
-    TEXTBOX: 'TEXTBOX',
-    LAYOUT_GRID_1_2: 'LAYOUT_GRID_1_2'
-  };
-  ```
+### Define the type of UI Elements/Layouts ###
+  - Every UI element/layout has mandatory `type` property. It helps to render corresponding component.
+    ```Javascript
+    // Const.js
+    export const elements = {
+      TEXTBOX: 'TEXTBOX',
+      LAYOUT_GRID_1_2: 'LAYOUT_GRID_1_2'
+    };
+    ```
 
-- #### Create and Register those elements/Layouts ####
-  - **create element**
+### Create and Register those elements/Layouts ###
+  - **Create element**
 
     Elements/Layouts are react component it self but with the feature of drag. To acheive the same we will use `Draggable` component.
 
@@ -133,59 +133,61 @@ npm install --save react-page-maker
 
     **Note** - Call `registerPaletteElements` function before you render palette. e.g. Inside `constructor` or `componentWillMount`
 
+### Utilise these UI Elements/Layouts in Palette ###
 
-- #### Utilise these UI Elements/Layouts in Palette ####
-    Pass list of elements which we need to show inside palette (not every time we will be using all elements).
-    ```Javascript
-    import { Palette, Canvas } from 'react-page-maker';
+  Pass list of elements which we need to show inside palette (not every time we will be using all elements).
 
-    class PageConfigurator extends Component {
-      constructor(props) {
-        super(props);
-        this.registerPaletteElements();
-      }
+  ```Javascript
+  import { Palette, Canvas } from 'react-page-maker';
 
-      registerPaletteElements = () => {
-        registerPaletteElements([{ // <-- registered palette elements
-          type: elements.TEXTBOX,
-          component: DraggableTextbox
-        }, {
-          type: elements.LAYOUT_GRID_1_2,
-          component: DragItemGridLayoutR1C2
-        }]);
-      }
-
-      paletteElements = [{ // <-- palette elements to be shown
-        id: 'f1', // make sure ID is unique
-        name: 'Input Field',
-        type: elements.TEXTBOX
-      }, {
-        id: 'g1',
-        name: 'Two Dropzones',
-        type: elements.LAYOUT_GRID_1_2
-      }]
-
-      render() {
-        return (
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-sm-8 canvas-wrapper">
-                <Canvas />
-              </div>
-              <div className="col-sm-4 palette-wrapper">
-                <Palette paletteElements={this.paletteElements} />
-              </div>
-            </div>
-          </div>
-        );
-      }
+  class PageConfigurator extends Component {
+    constructor(props) {
+      super(props);
+      this.registerPaletteElements();
     }
 
-    export default PageConfigurator;
-    ```
-    **Note** - Make sure every palette element has unique ID and pass the element list to `Palette` component.
+    registerPaletteElements = () => {
+      registerPaletteElements([{ // <-- registered palette elements
+        type: elements.TEXTBOX,
+        component: DraggableTextbox
+      }, {
+        type: elements.LAYOUT_GRID_1_2,
+        component: DragItemGridLayoutR1C2
+      }]);
+    }
 
-    By now, you would be able to see Canvas and Palette (with those provided elements).
+    paletteElements = [{ // <-- palette elements to be shown
+      id: 'f1', // make sure ID is unique
+      name: 'Input Field',
+      type: elements.TEXTBOX
+    }, {
+      id: 'g1',
+      name: 'Two Dropzones',
+      type: elements.LAYOUT_GRID_1_2
+    }]
+
+    render() {
+      return (
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-sm-8 canvas-wrapper">
+              <Canvas />
+            </div>
+            <div className="col-sm-4 palette-wrapper">
+              <Palette paletteElements={this.paletteElements} />
+            </div>
+          </div>
+        </div>
+      );
+    }
+  }
+
+  export default PageConfigurator;
+  ```
+
+  **Note** - Make sure every palette element has unique ID and pass the element list to `Palette` component.
+
+  By now, you would be able to see Canvas and Palette (with those provided elements).
 
 
 ## Components ##
@@ -271,11 +273,11 @@ npm install --save react-page-maker
 
 ## API ##
 
-- ### State ###
+### State ###
 
   It provide access to the state object which holds all the meta data.
 
-    **Syntax**
+  - **Syntax**
 
     ```Javascript
     import { state } from 'react-page-maker';
@@ -284,7 +286,7 @@ npm install --save react-page-maker
     **methods**
 
     | Name        | Syntax           | Description  |
-    | ------------- |:-------------:| ----- | ----- |
+    | ------------- |:-------------:| ----- |
     | getState      | `state.getState();` | Function to get current state of the canvas |
     | clearState      | `state.clearState();` | Function to clear/flush the complete state |
     | addEventListener      | `state.addEventListener(event, (data) => ());` | Function to add events and it has two params(event and cb). **event** - String, name of event. Supported event is `change`. **cb** - Callback function |
@@ -293,4 +295,4 @@ npm install --save react-page-maker
 
 
 ## Thanks ##
-Please feel free to raise PR for any new feature or bug (if you find one).
+Please feel free to raise PR for any new feature or bug (if you find any).
