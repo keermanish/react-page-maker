@@ -1,0 +1,70 @@
+/* Very basic style */
+
+/* Prevent the text contents of draggable elements from being selectable. */
+[draggable] {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+
+  /* Required to make elements draggable in old WebKit */
+  -khtml-user-drag: element;
+  -webkit-user-drag: element;
+}
+
+/* class gets appended to canvas when user dragging over on it */
+.inside {
+  -webkit-box-shadow: inset 0 0 26px 0.5px rgba(20, 180, 81, 0.75);
+  -moz-box-shadow: inset 0 0 26px 0.5px rgba(20, 180, 81, 0.75);
+  box-shadow: inset 0 0 26px 0.5px rgba(20, 180, 81, 0.75);
+}
+
+.trash-box.inside,
+.canvas.inside.no-space {
+  -webkit-box-shadow: inset 0 0 26px 0.5px rgba(230, 23, 23, 0.5);
+  -moz-box-shadow: inset 0 0 26px 0.5px rgba(230, 23, 23, 0.75);
+  box-shadow: inset 0 0 26px 0.5px rgba(230, 23, 23, 0.75);
+}
+
+.canvas {
+  padding: 10px;
+  width: 100%;
+  min-width: 100px;
+  min-height: 70vh;
+  box-sizing: border-box;
+  background: #dce3eb;
+  border: 1px solid #bec2c7;
+}
+
+.palette {
+  padding: 10px;
+  min-height: 70vh;
+  background: #fff;
+  float: right;
+  box-sizing: border-box;
+  border: 1px solid #2476e2;
+}
+
+.drag-item {
+  background-color: #dae5f5;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 1px solid #2476e2;
+}
+
+.palette-wrapper .drag-item {
+  background-color: #2476e2;
+}
+
+.drag-item + div {
+  margin-top: 10px;
+}
+
+.trash-box {
+  width: 100px;
+  height: 100px;
+  margin: 10px 0;
+  color: #000;
+  background: #fcd2d2;
+  text-align: center;
+}

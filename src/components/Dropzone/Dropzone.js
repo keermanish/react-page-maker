@@ -273,7 +273,6 @@ class Dropzone extends Component {
 }
 
 Dropzone.propTypes = {
-  acceptElement: PropTypes.bool,
   id: PropTypes.string.isRequired,
   capacity: PropTypes.number,
   onDrop: PropTypes.func,
@@ -283,7 +282,6 @@ Dropzone.propTypes = {
 };
 
 Dropzone.defaultProps = {
-  acceptElement: true,
   initialElements: [],
   onElementMove: () => (true)
 };
