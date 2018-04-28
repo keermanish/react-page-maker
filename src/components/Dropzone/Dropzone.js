@@ -56,7 +56,7 @@ class Dropzone extends Component {
       this.setState({
         initialElements: updatedInitialItems,
         droppedElements: updatedInitialItems
-      }, this._updateState);
+      }, () => (this._updateState()));
     }
   }
 
@@ -81,7 +81,7 @@ class Dropzone extends Component {
 
     this.setState({
       droppedElements: this.state.droppedElements.filter((d, i) => (i !== index))
-    }, this._updateState);
+    }, () => (this._updateState()));
   }
 
   /**
