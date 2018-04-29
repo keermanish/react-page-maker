@@ -250,12 +250,12 @@ class Dropzone extends Component {
 
   render() {
     const { droppedElements } = this.state;
-    const { capacity } = this.props;
+    const { capacity, id } = this.props;
 
     return (
       <div
         ref={this.canvasRef}
-        className={`${capacity && capacity === droppedElements.length ? 'no-space' : ''} canvas`}
+        className={`${capacity && capacity === droppedElements.length ? 'no-space' : ''} ${id === 'root' ? 'canvas' : ''} dropzone`}
         onDragOver={this._onDragOver}
         onDragLeave={this._onDragLeave}
         onDragEnter={this._onDragEnter}
@@ -266,6 +266,13 @@ class Dropzone extends Component {
           droppedElements.map(e => (
             this._renderDragItem({ ...e })
           ))
+        }
+
+        {
+          !droppedElements.length ?
+            <div className={`${id === 'root' ? 'canvas' : ''} dropzone`}>
+              <p className="dropzone-empty">Drop Here</p>
+            </div> : null
         }
       </div>
     );
