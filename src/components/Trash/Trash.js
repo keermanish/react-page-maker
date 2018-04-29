@@ -47,6 +47,9 @@ class Trash extends Component {
       // remove element from current canvas
       removeElement(elementToBeTrashed.elementID);
 
+      // done dragging, flush the dragged element
+      core.setDraggedElement(null);
+
       // acknowledge
       onAfterTrash();
     }
