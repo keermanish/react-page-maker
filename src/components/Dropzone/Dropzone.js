@@ -250,12 +250,12 @@ class Dropzone extends Component {
 
   render() {
     const { droppedElements } = this.state;
-    const { capacity, id } = this.props;
+    const { capacity, id, placeholder } = this.props;
 
     return (
       <div
         ref={this.canvasRef}
-        className={`${capacity && capacity === droppedElements.length ? 'no-space' : ''} ${id === 'root' ? 'canvas' : ''} dropzone`}
+        className={`${capacity && capacity === droppedElements.length ? 'no-space' : ''} ${id === 'root' ? 'canvas' : ''} ${!droppedElements.length ? 'empty' : ''} dropzone`}
         onDragOver={this._onDragOver}
         onDragLeave={this._onDragLeave}
         onDragEnter={this._onDragEnter}
@@ -270,9 +270,7 @@ class Dropzone extends Component {
 
         {
           !droppedElements.length ?
-            <div className={`${id === 'root' ? 'canvas' : ''} dropzone`}>
-              <p className="dropzone-empty">Drop Here</p>
-            </div> : null
+            <p className="dropzone-placeholder">{placeholder}</p> : null
         }
       </div>
     );
@@ -285,11 +283,13 @@ Dropzone.propTypes = {
   onDrop: PropTypes.func,
   onElementMove: PropTypes.func,
   initialElements: PropTypes.instanceOf(PropTypes.array),
-  parentID: PropTypes.string.isRequired
+  parentID: PropTypes.string.isRequired,
+  placeholder: PropTypes.string
 };
 
 Dropzone.defaultProps = {
   initialElements: [],
+  placeholder: 'Drop Here',
   onElementMove: () => (true)
 };
 

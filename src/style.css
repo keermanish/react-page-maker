@@ -29,9 +29,14 @@
 .dropzone {
   width: 100%;
   padding: 10px;
+  position: relative;
   box-sizing: border-box;
   background: #f0faff;
   border: 1px solid #0277bd;
+}
+
+.dropzone.empty {
+  padding: 40px;
 }
 
 .palette {
@@ -49,9 +54,13 @@
   border: 1px solid #01579b;
 }
 
-.dropzone-empty {
+.dropzone-placeholder {
+  width: 100%;
   color: #01579b;
   text-align: center;
+  position: absolute;
+  left: 0;
+  top: calc(50% - 10px);
   animation-name: changeColor;
   animation-duration: 2s;
   animation-timing-function: ease-in-out;
