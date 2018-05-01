@@ -1,6 +1,6 @@
 {
   "name": "react-page-maker",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A react package which will help you to generate the meta data based on the selection of UI elements. Library provides feature of Drag and Drop, where you can drag the UI elements/layouts from palette and drop it into appropriate dropzone/canvas",
   "main": "./dist/index.js",
   "scripts": {
@@ -25,7 +25,8 @@
     "drop",
     "canvas",
     "palette",
-    "meta data"
+    "meta data",
+    "json"
   ],
   "dependencies": {
     "prop-types": "^15.6.1",
