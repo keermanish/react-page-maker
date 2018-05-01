@@ -69,8 +69,8 @@ Draggable.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string,
   dropzoneID: PropTypes.string,
-  payload: PropTypes.instanceOf(PropTypes.object),
-  elementProps: PropTypes.instanceOf(PropTypes.object),
+  payload: PropTypes.instanceOf(Object),
+  elementProps: PropTypes.instanceOf(Object),
   type: PropTypes.string.isRequired,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.element),

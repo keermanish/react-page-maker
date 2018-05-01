@@ -282,7 +282,7 @@ Dropzone.propTypes = {
   capacity: PropTypes.number,
   onDrop: PropTypes.func,
   onElementMove: PropTypes.func,
-  initialElements: PropTypes.instanceOf(PropTypes.array),
+  initialElements: PropTypes.arrayOf(Object),
   parentID: PropTypes.string.isRequired,
   placeholder: PropTypes.string
 };
