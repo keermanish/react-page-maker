@@ -10,6 +10,8 @@ Library provides feature of Drag and Drop, where you can drag the UI elements/la
 npm install --save react-page-maker
 ```
 
+[![Demo](https://img.youtube.com/vi/2yzeqrZA5v0/0.jpg)](https://www.youtube.com/watch?v=2yzeqrZA5v0)
+
 # How to use #
 1. Define the type of UI elements/layouts
 2. Create and Register those elements/layouts
