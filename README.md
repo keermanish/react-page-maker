@@ -1,7 +1,7 @@
 # [React Page Maker](https://www.npmjs.com/package/react-page-maker)
 [![npm version](https://badge.fury.io/js/react-page-maker.svg)](https://badge.fury.io/js/react-page-maker)
 
-A react package which will help you to generate the **meta data** based on the selection of UI elements.
+A react package which will help you to generate the **meta data(JSON)** based on the selection of UI elements.
 
 Library provides feature of Drag and Drop, where you can drag the UI elements/layouts from palette and drop it into appropriate dropzone/canvas.
 
@@ -14,6 +14,7 @@ npm install --save react-page-maker
 1. Define the type of UI elements/layouts
 2. Create and Register those elements/layouts
 3. Utilise these elements/layouts in Palette
+4. [Working example](https://github.com/keermanish/example-react-page-maker.git)
 
 
 ### Define the type of UI Elements/Layouts ###
@@ -259,6 +260,8 @@ npm install --save react-page-maker
 
 - **Trash**
 
+  You can use this component to have feature of trash/delete. Once element dropped in Trash it get removed from canvas and state.
+
   | Prop        | Type           | Description  |
   | ------------- |:-------------:| -----|
   | onBeforeTrash      | function | Callback function, which expect boolean return value |
@@ -286,7 +289,7 @@ npm install --save react-page-maker
     **methods**
 
     | Name        | Syntax           | Description  |
-    | ------------- |:-------------:| ----- |
+    | ------------- |:-------------| ----- |
     | getState      | `state.getState();` | Function to get current state of the canvas |
     | clearState      | `state.clearState();` | Function to clear/flush the complete state |
     | addEventListener      | `state.addEventListener(event, (data) => ());` | Function to add events and it has two params(event and cb). **event** - String, name of event. Supported event is `change`. **cb** - Callback function |
