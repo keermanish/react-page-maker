@@ -17,7 +17,8 @@ class Dropzone extends Component {
     // droppedElements - to keep track of newly added elements
     this.state = {
       initialElements: [],
-      droppedElements: []
+      droppedElements: [],
+      initDone: false
     };
   }
 
@@ -48,6 +49,7 @@ class Dropzone extends Component {
         key: e.id,
         dropzoneID,
         showBasicContent: false,
+        updateState: this._updateState,
         removeElement: this._removeElement,
         flushDroppedElements: this._flushDroppedElements,
         checkAndRemoveElement: this._checkAndRemoveElement
@@ -56,7 +58,11 @@ class Dropzone extends Component {
       this.setState({
         initialElements: updatedInitialItems,
         droppedElements: updatedInitialItems
-      }, () => (this._updateState()));
+      }, () => (this._updateState(() => {
+        this.setState({
+          initDone: true
+        });
+      })));
     }
   }
 
@@ -209,6 +215,7 @@ class Dropzone extends Component {
       key: updatedData.id,
       dropzoneID,
       showBasicContent: false,
+      updateState: this._updateState,
       removeElement: this._removeElement,
       flushDroppedElements: this._flushDroppedElements,
       checkAndRemoveElement: this._checkAndRemoveElement
@@ -263,8 +270,16 @@ class Dropzone extends Component {
         onDragEnd={this._onDragEnd}
       >
         {
-          droppedElements.map(e => (
-            this._renderDragItem({ ...e })
+          droppedElements.map((e, i) => (
+            this._renderDragItem({
+              ...e,
+              index: i,
+              initDone: this.state.initDone,
+              dropzoneProps: {
+                initDone: this.state.initDone,
+                parentID: e.id
+              }
+            })
           ))
         }
 

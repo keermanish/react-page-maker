@@ -4,6 +4,13 @@ import PropTypes from 'prop-types';
 import core from '../../core/core';
 
 class Draggable extends Component {
+  componentWillReceiveProps(nextProps) {
+    // update the state once parent state initialisation is done
+    if (this.props.initDone !== nextProps.initDone && nextProps.initDone) {
+      this.props.updateState();
+    }
+  }
+
   _dragEnd = (e) => {
     e.stopPropagation();
 
@@ -68,6 +75,8 @@ class Draggable extends Component {
 Draggable.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string,
+  initDone: PropTypes.bool,
+  updateState: PropTypes.func,
   dropzoneID: PropTypes.string,
   payload: PropTypes.instanceOf(Object),
   elementProps: PropTypes.instanceOf(Object),
@@ -83,7 +92,8 @@ Draggable.propTypes = {
 Draggable.defaultProps = {
   checkAndRemoveElement: () => (true),
   elementProps: null,
-  payload: null
+  payload: null,
+  updateState: () => (true)
 };
 
 export default Draggable;
