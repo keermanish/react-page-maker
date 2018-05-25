@@ -42,16 +42,32 @@ class State {
           }
         } else {
           const fieldsToBeAdded = [];
-          updatedFields.forEach((uField) => {
-            const fieldIndex = matchedParentCanvas.fields.findIndex(f => f.id === uField.id);
 
-            if (fieldIndex === -1) {
-              fieldsToBeAdded.push(uField);
-            } else {
-              matchedParentCanvas.fields = matchedParentCanvas.fields
-                .map((f, i) => (i === fieldIndex ? uField : f));
-            }
-          });
+          // if user working on multi dropzone field
+          const matchedDropzoneFields = matchedParentCanvas.fields
+            .filter(f => f.dropzoneID === dropzoneID);
+
+          if (matchedDropzoneFields.length !== updatedFields.length) {
+            // some of the field got deleted from dropzone
+            // replace all fields with new fields
+            matchedParentCanvas.fields = updatedFields
+              .concat(matchedParentCanvas.fields
+                .filter(f => f.dropzoneID !== dropzoneID));
+          } else {
+            updatedFields.forEach((uField) => {
+              const fieldIndex = matchedParentCanvas.fields
+                .findIndex(f => f.id === uField.id);
+
+              // user try to add new field
+              if (fieldIndex === -1) {
+                fieldsToBeAdded.push(uField);
+              } else {
+                // user try to update existing field
+                matchedParentCanvas.fields = matchedParentCanvas.fields
+                  .map((f, i) => (i === fieldIndex ? uField : f));
+              }
+            });
+          }
 
           // add new field to existing array
           if (fieldsToBeAdded.length) {

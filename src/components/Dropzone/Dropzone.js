@@ -82,12 +82,12 @@ class Dropzone extends Component {
    * function to remove element from droppedElements
    * @param elementID - {String} - ID of element
    */
-  _removeElement = (elementID) => {
+  _removeElement = (elementID, cb = () => {}) => {
     const index = this.state.droppedElements.findIndex(e => e.id === elementID);
 
     this.setState({
       droppedElements: this.state.droppedElements.filter((d, i) => (i !== index))
-    }, () => (this._updateState()));
+    }, () => this._updateState(cb));
   }
 
   /**

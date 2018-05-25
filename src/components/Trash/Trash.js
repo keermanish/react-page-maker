@@ -45,13 +45,13 @@ class Trash extends Component {
     // user tried and confirm to remove element
     if (status && core.getAttemptToRemove()) {
       // remove element from current canvas
-      removeElement(elementToBeTrashed.elementID);
+      removeElement(elementToBeTrashed.elementID, () => {
+        // acknowledge
+        onAfterTrash();
+      });
 
       // done dragging, flush the dragged element
       core.setDraggedElement(null);
-
-      // acknowledge
-      onAfterTrash();
     }
 
     // reset attempt to remove
