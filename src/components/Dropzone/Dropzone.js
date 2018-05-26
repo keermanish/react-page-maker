@@ -181,7 +181,10 @@ class Dropzone extends Component {
     let data = JSON.parse(e.dataTransfer.getData('data'));
     data = { ...data };
 
-    return onDrop ? onDrop(data, this._addElement) : this._addElement(data);
+    return onDrop ? onDrop(data, this._addElement, {
+      dropIndex: this.state.droppedElements.length + 1,
+      currentElements: this.state.droppedElements
+    }) : this._addElement(data);
   }
 
   /**

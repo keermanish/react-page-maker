@@ -122,7 +122,7 @@ class State {
      * loop though all parent(end level) nodes, and call `flushDroppedElements` function
      * so that component as well as application state gets flushed
      */
-    this.clearState = () => {
+    this.clearState = (cb = () => {}) => {
       const rootNode = state.tree[0];
       const topLevelFields = rootNode.fields.length;
 
@@ -130,6 +130,7 @@ class State {
         topLevelElement.flushDroppedElements(() => {
           if (i === topLevelFields - 1) {
             notifyStateChange();
+            cb();
           }
         });
       });

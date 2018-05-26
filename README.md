@@ -3,7 +3,7 @@
 
 A react package which will help you to generate the **meta data(JSON)** based on the selection of UI elements.
 
-Library provides feature of Drag and Drop, where you can drag the UI elements/layouts from palette and drop it into appropriate dropzone/canvas.
+Library provides feature of Drag and Drop, where you can drag the UI elements from palette and drop it into appropriate dropzone/canvas.
 
 # Install #
 ```shell
@@ -13,14 +13,14 @@ npm install --save react-page-maker
 [![Demo](https://img.youtube.com/vi/2yzeqrZA5v0/0.jpg)](https://www.youtube.com/watch?v=2yzeqrZA5v0)
 
 # How to use #
-1. Define the type of UI elements/layouts
-2. Create and Register those elements/layouts
-3. Utilise these elements/layouts in Palette
+1. Define the type of elements
+2. Create and Register elements/layouts
+3. Render Palette and Canvas
 4. [Working example](https://github.com/keermanish/example-react-page-maker.git)
 
 
-### Define the type of UI Elements/Layouts ###
-  - Every UI element/layout has mandatory `type` property. It helps to render corresponding component.
+### Define the type of elements ###
+  - Every element/layout has mandatory `type` property. It helps to render corresponding component.
     ```Javascript
     // Const.js
     export const elements = {
@@ -29,10 +29,10 @@ npm install --save react-page-maker
     };
     ```
 
-### Create and Register those elements/Layouts ###
+### Create and Register elements/Layouts ###
   - **Create element**
 
-    Elements/Layouts are react component it self but with the feature of drag. To acheive the same we will use `Draggable` component.
+    Elements/Layouts should have drag feature. To acheive the same we will use `Draggable` component.
 
     ```Javascript
     // DraggableTextbox.js
@@ -77,16 +77,15 @@ npm install --save react-page-maker
 
   - **Create Layout** (If you want more complex/nested structure)
 
-    This step is similar to creating an element only difference is that, we would be having some dropzones where we can drop the UI Elements.
+    Here steps are very similar to above but we would be having some dropzones where we can drop elements.
 
     ```Javascript
       // DraggableGrid_1_2.js
       import { Draggable, Dropzone } from 'react-page-maker';
 
       const DragItemGridLayout = (props) => {
-        // make sure you are passing `parentID` prop to dropzone
-        // it help to mainatain the state to meta data
-        const { showBasicContent, id, ...rest } = props;
+        // make sure you are passing `dropzoneProps` prop to dropzone
+        const { showBasicContent, dropzoneProps, ...rest } = props;
 
         if (showBasicContent) {
           return (
@@ -102,10 +101,10 @@ npm install --save react-page-maker
             <div className="grid-layout">
               <div className="row">
                 <div className="col-sm-6">
-                  <Dropzone parentID={id} id="canvas-1-1" />
+                  <Dropzone {...dropzoneProps} id="canvas-1-1" />
                 </div>
                 <div className="col-sm-6">
-                  <Dropzone parentID={id} id="canvas-1-2" />
+                  <Dropzone {...dropzoneProps} id="canvas-1-2" />
                 </div>
               </div>
             </div>
@@ -114,8 +113,8 @@ npm install --save react-page-maker
       };
     ```
     **Note** -
-      - Provide `id` and `parentID` to every dropzone
-      - Parent ID is nothing but an ID of current canvas (which will be available under props). It helps to maintain the nested state.
+      - Provide `id` and `dropzoneProps` to every dropzone
+      - `dropzoneProps` is by default available under props
 
 
   - **Register Elements**
@@ -131,14 +130,14 @@ npm install --save react-page-maker
       component: DragItemGridLayoutR1C2 // import from DraggableGrid_1_2.js
     }]);
     ```
-    After this step, application will be aware what type of elements we have and based on those type we can create required fields.
-    e.g. from `elements.TEXTBOX` we can create any text field
+    After this step, application will be aware what type of elements we have and based on this types we can create as many fields required.
+    e.g. from `elements.TEXTBOX` we can create any text field (First Name, Last Name, etc.)
 
     **Note** - Call `registerPaletteElements` function before you render palette. e.g. Inside `constructor` or `componentWillMount`
 
-### Utilise these UI Elements/Layouts in Palette ###
+### Render Palette and Canvas ###
 
-  Pass list of elements which we need to show inside palette (not every time we will be using all elements).
+  Pass list of elements which we need to show inside palette (since not every time we will be using all elements).
 
   ```Javascript
   import { Palette, Canvas } from 'react-page-maker';
@@ -188,7 +187,7 @@ npm install --save react-page-maker
   export default PageConfigurator;
   ```
 
-  **Note** - Make sure every palette element has unique ID and pass the element list to `Palette` component.
+  **Note** - Make sure every palette elements has unique ID.
 
   By now, you would be able to see Canvas and Palette (with those provided elements).
 
@@ -216,64 +215,78 @@ npm install --save react-page-maker
   | ------------- |:-------------:| -----|
   | id      | String | ID of a dropzone |
   | capacity      | Number | Maximum number of elements dropzone can maintain  |
-  | payload | Object      |    Any custom data that you want to pass |
   | initialElements      | Array | Array of element(Object) to be prepopulate inside dropzone, here format will be similar to palette elements |
+  | placeholder      | String | Text to be shown when dropzone is emepty. Default value is `Drop Here.` |
+  | onDrop      | Function | function gets triggered once element got dropped |
+  | onElementMove      | Function | Function get called when we try to move the element from one dropzone to another |
 
-  **methods**
-    - onDrop - To check which element is getting added inside dropzone.
-      - params
-        - data - Object, Info of element which is going to be add
-        - success - A callback function, which helps to decide whether to add element or not. if data is valid then call success function to proceed else skip.
-        - syntax -
+    ```Javascript
+    /**
+     * function gets triggered once element got dropped
+     * @param {Object} data - It holds element information
+     * @param {Function} cb - A callback function, which helps to decide whether to add element or not.
+     * if data is valid then call cb function to proceed else return false.
+     * @param {Number} dropIndex - Position where element getting dropped
+     * @param {Array} currentElements - Current elements which canvas holds
+     * @returns {cb/Boolean}
+     */
+    _onDrop = (data, cb, { dropIndex, currentElements }) => {
+      //In order to mock user input I'm using `window.prompt`
+      // in actual scenario we can add some async call to fetch data
+      const name = window.prompt('Enter name of field');
+      const id = window.prompt('Enter id of field');
 
-        ```Javascript
-        _onDrop = (data, cb) => {
-          //In order to mock user input I'm using `window.prompt`
-          // in actual scenario we can add some async call to fetch data
-          const name = window.prompt('Enter name of field');
-          const id = window.prompt('Enter id of field');
+      const result = cb({
+        ...data,
+        name: name || data.name,
+        id: id || data.id
+      });
+    }
 
-          const result = cb({
-            ...data,
-            name: name || data.name,
-            id: id || data.id
-          });
-        }
+    /**
+    * Function get called when we try to move the element from one dropzone to another
+    * @param {Object} elementMoved - Data of element which has been moved
+    * @returns {Boolean}
+    */
+    _onElementMove = (elementMoved) => (true);
 
-        <Dropzone onDrop={this._onDrop} />
-        ```
-    - onElementMove - Function get called when we try to move the element from one dropzone to another
-      - params
-        - elementMoved - Object, Data of element which has been moved
-        - success - Callback function, which expect boolean return value
-        - syntax -
+    <Dropzone
+      id="d1"
+      capacity={4}
+      initialElements={[]}
+      placeholder="Drop Here"
+      onDrop={this._onDrop}
+      onElementMove={this._onElementMove}
+      {...dropzoneProps}
+    />
+    ```
 
-        ```Javascript
-        <Dropzone onElementMove={() => (true)} />
-        ```
-
-- **Canvas** (This Component is extended version of Dropzone with some default properties in it)
-
-  | Prop        | Type           | Description  |
-  | ------------- |:-------------:| -----|
-  | initialElements      | Array | Array of element(Object) to be prepopulate inside canvas(), here format will be similar to palette elements |
-
-  **methods** (Same as methods of Dropzone component)
+- **Canvas**
+  This Component is extended version of Dropzone with some default properties (e.g. `ID`) in it.
 
 - **Trash**
 
   You can use this component to have feature of trash/delete. Once element dropped in Trash it get removed from canvas and state.
 
-  | Prop        | Type           | Description  |
-  | ------------- |:-------------:| -----|
-  | onBeforeTrash      | function | Callback function, which expect boolean return value |
-  | onAfterTrash      | function | Success function which gets triggered once element has been trashed |
-
   **Syntax**
     ```Javascript
-    import { Trash } from 'react-page-maker';
+    /**
+      * Function get trigger just before element getting trashed
+      * @param {Object} elementToBeTrashed - Data of element which is going to be trashed
+      * @returns {Boolean}
+      */
+      _onBeforeTrash = (elementToBeTrashed) => {
+        return true;
+      }
 
-    <Trash onBeforeTrash={() => (true)} onAfterTrash={this._onAfterTrash} />
+      /**
+      * Success function which gets triggered once element has been trashed
+      */
+      _onAfterTrash = () => {
+        console.log('Updated state', state.getState());
+      }
+
+      <Trash onBeforeTrash={this._onBeforeTrash} onAfterTrash={this._onAfterTrash} />
     ```
 
 ## API ##
@@ -286,17 +299,36 @@ npm install --save react-page-maker
 
     ```Javascript
     import { state } from 'react-page-maker';
+
+    // Function to get current state of the canvas
+    state.getState();
+
+    /**
+    * Function to flush canvas/current state
+    * @param {Function} cb - success call back, function gets triggered once canvas is flushed
+    */
+    state.clearState(() => {
+      console.log('Canvas has been flushed successfully')
+    });
+
+    /**
+    * Function to add event
+    * @param {String} event - name of event, For now we are supporting 'change' event
+    * @param {Function} cb - function gets called upon event trigger
+    * @param {Object} newState - new state
+    * @returns {Function} - instance of attached function
+    */
+    const cb = state.addEventListener('change', (newState) => {
+      console.log('new state', newState);
+    });
+
+    /**
+    * Function to remove event
+    * @param {String} event - name of event, For now we are supporting 'change' event
+    * @param {Function} oldEventInstance - instance of previously attached event
+    */
+    state.removeEventListener('change', cb);
     ```
-
-    **methods**
-
-    | Name        | Syntax           | Description  |
-    | ------------- |:-------------| ----- |
-    | getState      | `state.getState();` | Function to get current state of the canvas |
-    | clearState      | `state.clearState();` | Function to clear/flush the complete state |
-    | addEventListener      | `state.addEventListener(event, (data) => ());` | Function to add events and it has two params(event and cb). **event** - String, name of event. Supported event is `change`. **cb** - Callback function |
-    | removeEventListener      | `state.removeEventListener(event, instanceCb);` | Function to add events and it has two params(event and instanceCb). **event** - String, name of event to be removed. **instanceCb** - Instance of event function |
-
 
 
 ## Thanks ##
