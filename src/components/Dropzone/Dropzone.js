@@ -117,6 +117,7 @@ class Dropzone extends Component {
    */
   _flushDroppedElements = (cb = () => {}) => {
     this.setState({
+      initialElements: [],
       droppedElements: []
     }, () => (this._updateState(cb)));
   }
