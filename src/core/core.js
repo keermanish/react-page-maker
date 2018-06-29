@@ -47,6 +47,20 @@ class Core {
      */
     this.getRegisteredPaletteElements = () => (core.registeredPaletteElements);
 
+    /**
+     * function to set drop position
+     * @param {Number} dropPosition
+     */
+    this.setDropPostion = (dropPosition) => {
+      core.dropPosition = dropPosition;
+    };
+
+    /**
+     * function to return drop position
+     * @returns {Number}
+     */
+    this.getDropPostion = () => (core.dropPosition);
+
     /* eslint no-console:0 */
 
     /**

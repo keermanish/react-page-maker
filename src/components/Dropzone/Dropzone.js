@@ -31,6 +31,13 @@ class Dropzone extends Component {
   }
 
   /**
+   * function to remove before/after class form all canvas elements
+   */
+  _unmarkDragElements = () => {
+    [].forEach.call(this.canvasRef.current.querySelectorAll('.drag-item'), e => e.classList.remove('before', 'after'));
+  }
+
+  /**
    * function to set initial elements
    * @param initialElements {Array} - It holds all initial elements to be shown in canvas
    */
@@ -144,6 +151,7 @@ class Dropzone extends Component {
   // @param e {event}
   _onDragOver = (e) => {
     e.preventDefault();
+    e.stopPropagation();
   }
 
   /**
@@ -182,6 +190,8 @@ class Dropzone extends Component {
     let data = JSON.parse(e.dataTransfer.getData('data'));
     data = { ...data };
 
+    this._unmarkDragElements();
+
     return onDrop ? onDrop(data, this._addElement, {
       dropIndex: this.state.droppedElements.length + 1,
       currentElements: this.state.droppedElements
@@ -203,18 +213,40 @@ class Dropzone extends Component {
       id: dropzoneID,
       capacity
     } = this.props;
+    const dropPosition = core.getDropPostion();
     const draggedElement = core.getDraggedElement();
     const invalidUpdatedData = !updatedData || !updatedData.id;
+    let indexOfPresentElement = -1;
     const keyAlreadyPresent = updatedData.id &&
-      this.state.droppedElements.filter(e => e.id === updatedData.id).length;
+      this.state.droppedElements.filter((e, i) => {
+        if (e.id === updatedData.id) {
+          indexOfPresentElement = i;
+
+          return true;
+        }
+
+        return false;
+      }).length;
+    const isSameIndex = indexOfPresentElement === dropPosition;
+    let newElements = [].concat(this.state.droppedElements);
+    let elementAlreadyRemoved = false;
 
     // check fo unique key
     if (invalidUpdatedData || keyAlreadyPresent) {
-      return core.error('Duplicate or invalid ID');
+      if (isSameIndex) {
+        return core.error('Duplicate or invalid ID');
+      }
+
+      elementAlreadyRemoved = true;
+      newElements = newElements.map((e) => {
+        if (e.id === updatedData.id) {
+          return { ...e, remove: true };
+        }
+        return e;
+      });
     }
 
-    // make new list
-    const newElements = this.state.droppedElements.concat({
+    const elementToDrop = {
       ...updatedData,
       key: updatedData.id,
       dropzoneID,
@@ -223,7 +255,24 @@ class Dropzone extends Component {
       removeElement: this._removeElement,
       flushDroppedElements: this._flushDroppedElements,
       checkAndRemoveElement: this._checkAndRemoveElement
-    });
+    };
+
+    if (dropPosition > 0) {
+      newElements = [
+        ...newElements.slice(0, dropPosition),
+        elementToDrop,
+        ...newElements.slice(dropPosition)
+      ];
+    } else {
+      newElements = [
+        elementToDrop,
+        ...newElements
+      ];
+    }
+
+    if (!isSameIndex) {
+      newElements = newElements.filter(e => !e.remove);
+    }
 
     // check new list against max-capacity
     if (capacity && newElements.length > capacity) {
@@ -235,7 +284,7 @@ class Dropzone extends Component {
       droppedElements: newElements
     }, () => {
       // remove element from previous canvas
-      if (draggedElement && typeof draggedElement.checkAndRemoveElement === 'function') {
+      if (!elementAlreadyRemoved && draggedElement && typeof draggedElement.checkAndRemoveElement === 'function') {
         draggedElement.checkAndRemoveElement();
       }
 
