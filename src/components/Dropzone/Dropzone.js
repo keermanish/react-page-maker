@@ -193,7 +193,7 @@ class Dropzone extends Component {
     this._unmarkDragElements();
 
     return onDrop ? onDrop(data, this._addElement, {
-      dropIndex: this.state.droppedElements.length + 1,
+      dropIndex: core.getDropPostion() + 1,
       currentElements: this.state.droppedElements
     }) : this._addElement(data);
   }
