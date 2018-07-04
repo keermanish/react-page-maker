@@ -200,6 +200,7 @@ npm install --save react-page-maker
   | ------------- |:-------------:| -----|
   | id      | String | ID of an element |
   | name      | String | Name of an element |
+  | draggable      | Boolean | Manage element drag behaviour, default is true |
   | type      | String      |   Defines type of an element  |
   | payload | Object      |    Any custom data that you want to pass |
 
@@ -268,6 +269,11 @@ npm install --save react-page-maker
 
   You can use this component to have feature of trash/delete. Once element dropped in Trash it get removed from canvas and state.
 
+  | Prop        | Type           | Description  |
+  | ------------- |:-------------:| -----|
+  | onBeforeTrash      | function | cb which invoke just before element being trashed |
+  | onAfterTrash      | function | cb which invoke after element is trashed |
+
   **Syntax**
     ```Javascript
     /**
@@ -295,12 +301,19 @@ npm install --save react-page-maker
 
   It provide access to the state object which holds all the meta data.
 
+  | Prop        | Type           | Description  |
+  | ------------- |:-------------:| -----|
+  | getState      | function | returns current state of canvas |
+  | clearState      | function | flush current state |
+  | addEventListener      | function | to add event `change` |
+  | removeEventListener      | function | to remove event, pass proper event cb |
+
   - **Syntax**
 
     ```Javascript
     import { state } from 'react-page-maker';
 
-    // Function to get current state of the canvas
+    /* Function to get current state of the canvas */
     state.getState();
 
     /**
