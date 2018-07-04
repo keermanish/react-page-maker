@@ -90,7 +90,7 @@ class Draggable extends Component {
   }
 
   render() {
-    const { elementProps } = this.props;
+    const { elementProps, draggable } = this.props;
     let e = null;
 
     if (this.props.dropzoneID) {
@@ -101,13 +101,18 @@ class Draggable extends Component {
       };
     }
 
+    if (draggable) {
+      e = {
+        draggable: true
+      };
+    }
+
     return (
       <div
         ref={this.dragElemRef}
         className="drag-item"
         onDragStart={this._dragStart}
         onDragEnd={this._dragEnd}
-        draggable
         {...elementProps}
         {...e}
       >
@@ -124,6 +129,7 @@ Draggable.propTypes = {
   name: PropTypes.string,
   initDone: PropTypes.bool,
   index: PropTypes.number,
+  draggable: PropTypes.bool,
   updateState: PropTypes.func,
   dropzoneID: PropTypes.string,
   payload: PropTypes.instanceOf(Object),
@@ -141,6 +147,7 @@ Draggable.defaultProps = {
   checkAndRemoveElement: () => (true),
   elementProps: null,
   payload: null,
+  draggable: true,
   updateState: () => (true)
 };
 
