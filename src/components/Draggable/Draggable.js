@@ -103,6 +103,7 @@ class Draggable extends Component {
 
     if (draggable) {
       e = {
+        ...e,
         draggable: true
       };
     }
