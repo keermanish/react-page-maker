@@ -70,6 +70,10 @@ class Draggable extends Component {
     const elemCord = this.dragElemRef.current.getBoundingClientRect();
     const dragElemY = e.clientY;
 
+    if (!this.props.spaceAvailable) {
+      return false;
+    }
+
     if (dragElemY >= elemCord.y && dragElemY <= elemCord.y + elemCord.height) {
       const midY = elemCord.y + elemCord.height / 2;
       if (dragElemY < midY) {
@@ -82,6 +86,8 @@ class Draggable extends Component {
         core.setDropPostion(this.props.index + 1);
       }
     }
+
+    return true;
   }
 
   _onDragLeave = () => {
@@ -131,6 +137,7 @@ Draggable.propTypes = {
   initDone: PropTypes.bool,
   index: PropTypes.number,
   draggable: PropTypes.bool,
+  spaceAvailable: PropTypes.bool,
   updateState: PropTypes.func,
   dropzoneID: PropTypes.string,
   payload: PropTypes.instanceOf(Object),
