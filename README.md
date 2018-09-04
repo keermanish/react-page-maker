@@ -221,6 +221,7 @@ npm install --save react-page-maker
   | onDrop      | Function | function gets triggered once element got dropped |
   | onElementMove      | Function | Function get called when we try to move the element from one dropzone to another |
 
+
     ```Javascript
     /**
      * function gets triggered once element got dropped
@@ -260,6 +261,27 @@ npm install --save react-page-maker
       onElementMove={this._onElementMove}
       {...dropzoneProps}
     />
+    ```
+
+    Note - If is there any situation where you need to update the dropzone state manually then you can use `dangerouslySetElements` function
+
+    ```Javascript
+      onSomeAction = () => {
+        // Note - make sure you are passign valid data, else state service may break
+        const current = this.currentDropzone.current;
+        current && current.dangerouslySetElements([element1, element2]);
+        // element type should be similar to what you are passing in pallete
+
+        // or
+
+        current && current.dangerouslySetElements((currentElements) => currentElements
+          .map(doSomeTweaks));
+      }
+
+      <Dropzone
+        ref={this.currentDropzone}
+        {...requiredProps}
+      />
     ```
 
 - **Canvas**

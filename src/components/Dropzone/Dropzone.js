@@ -31,6 +31,39 @@ class Dropzone extends Component {
   }
 
   /**
+   * function to allow manual element update
+   * Note - function is only accessible through ref and make sure
+   * valid data is pass through else application state/hierarchy can break
+   * @param data {Array/Function} - if its function then make sure you are
+   * returning valida array
+   * @param done {function} - success call back function
+   */
+  dangerouslySetElements = (data, done) => {
+    let elements = [];
+    if (typeof data === 'function') {
+      elements = data(this.state.droppedElements) || [];
+    } else {
+      elements = data;
+    }
+    const { id: dropzoneID } = this.props;
+
+    elements = elements.map(e => ({
+      ...e,
+      dropzoneID,
+      showBasicContent: false,
+      updateState: this._updateState,
+      removeElement: this._removeElement,
+      flushDroppedElements: this._flushDroppedElements,
+      checkAndRemoveElement: this._checkAndRemoveElement
+    }));
+
+    this.setState({
+      initialElements: elements,
+      droppedElements: elements
+    }, () => this._updateState(done));
+  }
+
+  /**
    * function to remove before/after class form all canvas elements
    */
   _unmarkDragElements = () => {
