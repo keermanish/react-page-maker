@@ -126,6 +126,12 @@ class State {
       const rootNode = state.tree[0];
       const topLevelFields = rootNode.fields.length;
 
+      // canvas is empty, just notify other
+      if (!rootNode.fields.length) {
+        notifyStateChange();
+        cb();
+      }
+
       rootNode.fields.forEach((topLevelElement, i) => {
         topLevelElement.flushDroppedElements(() => {
           if (i === topLevelFields - 1) {
