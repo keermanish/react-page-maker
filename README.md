@@ -43,13 +43,22 @@ npm install --save react-page-maker
 
     const DraggableTextbox = (props) => {
       // `showBasicContent` is default prop passed by `Palette` component
-      const { showBasicContent, name } = props;
+      const { showBasicContent, showPreview, name } = props;
 
       if (showBasicContent) { // content to be shown in palette list
         return (
           <Draggable {...props}>
             <span>{name}</span>
           </Draggable>
+        );
+      }
+
+      if (showPreview) { // content to be shown in preview mode - end result
+        return (
+          <FormGroup>
+            <Label>{name}</Label>
+            <Input type="text" />
+          </FormGroup>
         );
       }
 
@@ -85,9 +94,9 @@ npm install --save react-page-maker
 
       const DragItemGridLayout = (props) => {
         // make sure you are passing `dropzoneProps` prop to dropzone
-        const { showBasicContent, dropzoneProps, ...rest } = props;
+        const { showBasicContent, showPreview, dropzoneProps, ...rest } = props;
 
-        if (showBasicContent) {
+        if (showBasicContent) { // content to be shown in pallete
           return (
             <Draggable {...props} >
               <span>{ rest.name }</span>
@@ -95,7 +104,20 @@ npm install --save react-page-maker
           );
         }
 
-        return (
+        if (showPreview) { // content to be shown in preview mode - end result
+          return (
+            <Row className="row">
+              <Col sm="6">
+                {rest.childNode['canvas-1-1']}
+              </Col>
+              <Col sm="6">
+                {rest.childNode['canvas-1-2']}
+              </Col>
+            </Row>
+          )
+        }
+
+        return ( // content to be shown in canvas
           <Draggable {...props} >
             <span>{ rest.name }</span>
             <div className="grid-layout">
@@ -316,6 +338,29 @@ npm install --save react-page-maker
 
       <Trash onBeforeTrash={this._onBeforeTrash} onAfterTrash={this._onAfterTrash} />
     ```
+
+- **Preview**
+  Use this component to show the preview version of current state (End Output). Make sure every draggable elements is returning something on `showPreview`
+
+  **Syntax**
+    ```Javascript
+    /* how to use */
+    <Preview />
+
+    /* OR - for more layout flexibility */
+    <Preview>
+      {
+        ({ children }) => (
+          <div>
+            Custom Layout
+            {children}
+          </div>
+        )
+      }
+    </Preview>
+    ```
+
+    Note - Refer [Create and Register elements/layouts](#create-and-register-elementslayouts) section to know the necessary changes in draggable elements.
 
 ## API ##
 
