@@ -108,10 +108,10 @@ npm install --save react-page-maker
           return (
             <Row className="row">
               <Col sm="6">
-                {childNode && childNode['canvas-1-1'].map(e => e)}
+                {childNode['canvas-1-1'] && childNode['canvas-1-1'].map(e => e)}
               </Col>
               <Col sm="6">
-                {childNode && childNode['canvas-1-2'].map(e => e)}
+                {childNode['canvas-1-2'] && childNode['canvas-1-2'].map(e => e)}
               </Col>
             </Row>
           )
