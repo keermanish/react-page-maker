@@ -94,7 +94,7 @@ npm install --save react-page-maker
 
       const DragItemGridLayout = (props) => {
         // make sure you are passing `dropzoneProps` prop to dropzone
-        const { showBasicContent, showPreview, dropzoneProps, ...rest } = props;
+        const { showBasicContent, showPreview, dropzoneProps, childNode, ...rest } = props;
 
         if (showBasicContent) { // content to be shown in pallete
           return (
@@ -108,10 +108,10 @@ npm install --save react-page-maker
           return (
             <Row className="row">
               <Col sm="6">
-                {rest.childNode['canvas-1-1']}
+                {childNode && childNode['canvas-1-1'].map(e => e)}
               </Col>
               <Col sm="6">
-                {rest.childNode['canvas-1-2']}
+                {childNode && childNode['canvas-1-2'].map(e => e)}
               </Col>
             </Row>
           )

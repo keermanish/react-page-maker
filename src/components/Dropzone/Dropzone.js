@@ -387,7 +387,10 @@ Dropzone.propTypes = {
   onElementMove: PropTypes.func,
   initialElements: PropTypes.arrayOf(Object),
   parentID: PropTypes.string.isRequired,
-  placeholder: PropTypes.string
+  placeholder: PropTypes.oneOf([
+    PropTypes.string,
+    PropTypes.node
+  ])
 };
 
 Dropzone.defaultProps = {

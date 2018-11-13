@@ -38,7 +38,9 @@ class Preview extends React.Component {
     // and then come back to current field
     if (Array.isArray(element.fields)) {
       element.fields.forEach((field) => {
-        children[field.dropzoneID] = this._renderElementInPreviewMode(field);
+        children[field.dropzoneID] = children[field.dropzoneID] || [];
+        children[field.dropzoneID] = children[field.dropzoneID]
+          .concat(this._renderElementInPreviewMode(field));
       });
     }
 
@@ -47,6 +49,7 @@ class Preview extends React.Component {
     return (
       <elementData.component
         id={element.id}
+        key={element.id}
         childNode={children}
         {...{ ...element, showPreview: true, showBasicContent: false }}
       />
