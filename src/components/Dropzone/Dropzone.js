@@ -79,6 +79,7 @@ class Dropzone extends Component {
     // but initialElements has some element to be set
     const gotInitialItems = Array.isArray(initialElements) &&
                             initialElements.length &&
+                            !this.state.initDone &&
                             !this.state.initialElements.length;
 
     // for first time add initialElements to droppedElements
@@ -286,6 +287,7 @@ class Dropzone extends Component {
       showBasicContent: false,
       updateState: this._updateState,
       removeElement: this._removeElement,
+      initialElements: this.state.initialElements,
       flushDroppedElements: this._flushDroppedElements,
       checkAndRemoveElement: this._checkAndRemoveElement
     };

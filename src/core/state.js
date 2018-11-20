@@ -111,11 +111,57 @@ class State {
       notifyStateChange();
     };
 
+    // function to traverse through all node
+    // remove all private/functional properties
+    // and return flat object for each node
+    const traverseAndTakeSnapshot = (element) => {
+      const subFields = [];
+      const necessaryDetails = {};
+
+      // remove all private/functinal properties
+      Object.keys(element).forEach((key) => {
+        if (typeof element[key] !== 'function') {
+          necessaryDetails[key] = element[key];
+        }
+      });
+
+      // check for sub fields and perform same operations recursively
+      if (element.fields && element.fields.length) {
+        element.fields.forEach((f) => {
+          subFields.push(traverseAndTakeSnapshot(f));
+        });
+      }
+
+      // if append initialElements and updated fields
+      if (subFields.length) {
+        necessaryDetails.initialElements = [];
+        necessaryDetails.fields = [];
+
+        subFields.forEach((sf) => {
+          necessaryDetails.initialElements.push(sf);
+          necessaryDetails.fields.push(sf);
+        });
+      }
+
+      // return flat object which represent current node in tree
+      return necessaryDetails;
+    };
+
     /**
-     * function to return current state of tree
+     * function to return current state of tree (as is)
+     * keeping this function to give backward compatibility
      * @param {Object} - state tree
      */
     this.getState = () => (state.tree);
+
+    /**
+     * function to return storable current state
+     * this function does same job as getState only it make sure
+     * returned data is in proper format and unecessary properties removed
+     * @param {Object} - state tree
+     */
+    this.getStorableState = () => (state.tree[0].fields
+      .map(f => traverseAndTakeSnapshot(f)));
 
     /**
      * function to clear the state
