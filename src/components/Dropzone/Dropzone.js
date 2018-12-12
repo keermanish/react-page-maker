@@ -216,6 +216,7 @@ class Dropzone extends Component {
   _onDrop = (e) => {
     e.preventDefault();
     e.stopPropagation();
+    const { droppedElements } = this.state;
 
     core.setAttemptToRemove(false);
     this._manageInsideClass(e, 'remove');
@@ -227,8 +228,8 @@ class Dropzone extends Component {
     this._unmarkDragElements();
 
     return onDrop ? onDrop(data, this._addElement, {
-      dropIndex: core.getDropPostion() + 1,
-      currentElements: this.state.droppedElements
+      dropIndex: !droppedElements.length ? core.getDropPostion() + 1 : 0,
+      currentElements: droppedElements
     }) : this._addElement(data);
   }
 
