@@ -61,12 +61,14 @@ class State {
               // user try to add new field
               if (fieldIndex === -1) {
                 fieldsToBeAdded.push(uField);
-              } else {
-                // user try to update existing field
-                matchedParentCanvas.fields = matchedParentCanvas.fields
-                  .map((f, i) => (i === fieldIndex ? uField : f));
               }
             });
+
+            // no new fields
+            if (!fieldsToBeAdded.length) {
+              // either user has updated the field or changed the order
+              matchedParentCanvas.fields = updatedFields;
+            }
           }
 
           // add new field to existing array
