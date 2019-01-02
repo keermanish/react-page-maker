@@ -33,6 +33,7 @@ class Draggable extends Component {
       id,
       type,
       name,
+      fields,
       payload,
       dropzoneID,
       removeElement,
@@ -45,6 +46,10 @@ class Draggable extends Component {
       name,
       payload
     };
+
+    if (fields) {
+      data.fields = fields;
+    }
 
     e.dataTransfer.effectAllowed = 'copy';
     e.dataTransfer.setData('data', JSON.stringify(data)); // required, we cann't pass JS object
@@ -136,6 +141,7 @@ Draggable.propTypes = {
   name: PropTypes.string,
   initDone: PropTypes.bool,
   index: PropTypes.number,
+  fields: PropTypes.instanceOf(Array),
   draggable: PropTypes.bool,
   spaceAvailable: PropTypes.bool,
   updateState: PropTypes.func,
