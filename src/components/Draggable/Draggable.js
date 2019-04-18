@@ -73,22 +73,38 @@ class Draggable extends Component {
    */
   _onDragOver = (e) => {
     const elemCord = this.dragElemRef.current.getBoundingClientRect();
-    const dragElemY = e.clientY;
 
     if (!this.props.spaceAvailable) {
       return false;
     }
 
-    if (dragElemY >= elemCord.y && dragElemY <= elemCord.y + elemCord.height) {
-      const midY = elemCord.y + elemCord.height / 2;
-      if (dragElemY < midY) {
-        this.dragElemRef.current.classList.remove('after');
-        this.dragElemRef.current.classList.add('before');
-        core.setDropPostion(this.props.index);
-      } else {
-        this.dragElemRef.current.classList.remove('before');
-        this.dragElemRef.current.classList.add('after');
-        core.setDropPostion(this.props.index + 1);
+    if (this.props.allowHorizontal) {
+      const dragElemX = e.clientX;
+      if (dragElemX >= elemCord.x && dragElemX <= elemCord.x + elemCord.width) {
+        const midX = elemCord.x + elemCord.width / 2;
+        if (dragElemX < midX) {
+          this.dragElemRef.current.classList.remove('after');
+          this.dragElemRef.current.classList.add('before');
+          core.setDropPostion(this.props.index);
+        } else {
+          this.dragElemRef.current.classList.remove('before');
+          this.dragElemRef.current.classList.add('after');
+          core.setDropPostion(this.props.index + 1);
+        }
+      }
+    } else {
+      const dragElemY = e.clientY;
+      if (dragElemY >= elemCord.y && dragElemY <= elemCord.y + elemCord.height) {
+        const midY = elemCord.y + elemCord.height / 2;
+        if (dragElemY < midY) {
+          this.dragElemRef.current.classList.remove('after');
+          this.dragElemRef.current.classList.add('before');
+          core.setDropPostion(this.props.index);
+        } else {
+          this.dragElemRef.current.classList.remove('before');
+          this.dragElemRef.current.classList.add('after');
+          core.setDropPostion(this.props.index + 1);
+        }
       }
     }
 
@@ -101,7 +117,7 @@ class Draggable extends Component {
   }
 
   render() {
-    const { elementProps, draggable } = this.props;
+    const { elementProps, draggable, allowHorizontal } = this.props;
     let e = null;
 
     if (this.props.dropzoneID) {
@@ -122,7 +138,7 @@ class Draggable extends Component {
     return (
       <div
         ref={this.dragElemRef}
-        className="drag-item"
+        className={`drag-item ${allowHorizontal ? 'inline' : ''}`}
         onDragStart={this._dragStart}
         onDragEnd={this._dragEnd}
         {...elementProps}
@@ -141,6 +157,7 @@ Draggable.propTypes = {
   name: PropTypes.string,
   initDone: PropTypes.bool,
   index: PropTypes.number,
+  allowHorizontal: PropTypes.bool,
   fields: PropTypes.instanceOf(Array),
   draggable: PropTypes.bool,
   spaceAvailable: PropTypes.bool,

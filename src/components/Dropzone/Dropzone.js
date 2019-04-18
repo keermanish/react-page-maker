@@ -246,7 +246,8 @@ class Dropzone extends Component {
   _addElement = (updatedData) => {
     const {
       id: dropzoneID,
-      capacity
+      capacity,
+      allowHorizontal
     } = this.props;
     const dropPosition = core.getDropPostion();
     const draggedElement = core.getDraggedElement();
@@ -285,6 +286,7 @@ class Dropzone extends Component {
       ...updatedData,
       key: updatedData.id,
       dropzoneID,
+      allowHorizontal,
       showBasicContent: false,
       updateState: this._updateState,
       removeElement: this._removeElement,
@@ -388,6 +390,7 @@ Dropzone.propTypes = {
   capacity: PropTypes.number,
   onDrop: PropTypes.func,
   onElementMove: PropTypes.func,
+  allowHorizontal: PropTypes.bool,
   initialElements: PropTypes.arrayOf(Object),
   parentID: PropTypes.string.isRequired,
   placeholder: PropTypes.oneOf([

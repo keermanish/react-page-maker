@@ -238,6 +238,7 @@ npm install --save react-page-maker
   | ------------- |:-------------:| -----|
   | id      | String | ID of a dropzone |
   | capacity      | Number | Maximum number of elements dropzone can maintain  |
+  | allowHorizontal      | Bool | Allow horizontal drop, default is vertical  |
   | initialElements      | Array | Array of element(Object) to be prepopulate inside dropzone, here format will be similar to palette elements |
   | placeholder      | String | Text to be shown when dropzone is emepty. Default value is `Drop Here.` |
   | onDrop      | Function | function gets triggered once element got dropped |
