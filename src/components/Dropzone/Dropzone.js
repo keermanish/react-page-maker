@@ -330,6 +330,12 @@ class Dropzone extends Component {
       this._updateState();
     });
 
+    // adding dropping class to dropzone, it can be used for animation purpose
+    this.canvasRef.current.classList.add('dropping');
+    setTimeout(() => {
+      this.canvasRef.current.classList.remove('dropping');
+    }, 500);
+
     return {
       dropzoneID,
       elements: newElements
@@ -393,7 +399,7 @@ Dropzone.propTypes = {
   allowHorizontal: PropTypes.bool,
   initialElements: PropTypes.arrayOf(Object),
   parentID: PropTypes.string.isRequired,
-  placeholder: PropTypes.oneOf([
+  placeholder: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.node
   ])
