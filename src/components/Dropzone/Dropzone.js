@@ -45,14 +45,16 @@ class Dropzone extends Component {
     } else {
       elements = data;
     }
-    const { id: dropzoneID } = this.props;
+    const { id: dropzoneID, parentID } = this.props;
 
     elements = elements.map(e => ({
       ...e,
       dropzoneID,
+      parentID,
       showBasicContent: false,
       updateState: this._updateState,
       removeElement: this._removeElement,
+      updateElement: this._updateElement,
       flushDroppedElements: this._flushDroppedElements,
       checkAndRemoveElement: this._checkAndRemoveElement
     }));
@@ -84,11 +86,13 @@ class Dropzone extends Component {
 
     // for first time add initialElements to droppedElements
     if (gotInitialItems) {
-      const { id: dropzoneID } = this.props;
+      const { id: dropzoneID, parentID } = this.props;
+      console.log('during load', parentID);
       const updatedInitialItems = initialElements.map(e => ({
         ...e,
         key: e.id,
         dropzoneID,
+        parentID,
         showBasicContent: false,
         updateState: this._updateState,
         removeElement: this._removeElement,
@@ -122,12 +126,48 @@ class Dropzone extends Component {
   /**
    * function to remove element from droppedElements
    * @param elementID - {String} - ID of element
+   * @param cb - {function}
+   * @param dispatchElementRemove {Boolean} - trigger `removeElement` event if its true
    */
-  _removeElement = (elementID, cb = () => {}) => {
+  _removeElement = (elementID, cb = () => {}, dispatchElementRemove) => {
     const index = this.state.droppedElements.findIndex(e => e.id === elementID);
 
     this.setState({
       droppedElements: this.state.droppedElements.filter((d, i) => (i !== index))
+    }, () => this._updateState(cb, dispatchElementRemove ? elementID : null));
+  }
+
+  /**
+   * function to update element from droppedElements
+   * @param newData - {element} - { id, name, type, payload }
+   * @param cb - {function}
+   */
+  _updateElement = (newData, cb = () => {}) => {
+    const elementIndex = this.state.droppedElements.findIndex(e => e.id === newData.id);
+
+    if (elementIndex === -1) {
+      return cb(null);
+    }
+
+    // support is limited to below keys only, to avoid possible breaks
+    const supoortedKeys = ['name', 'type', 'payload'];
+    const newElementData = {};
+    Object.keys(newData)
+      .forEach(key => {
+        if (supoortedKeys.indexOf(key) !== -1) {
+          newElementData[key] = newData[key];
+        }
+      });
+
+    this.setState({
+      droppedElements: this.state.droppedElements
+        .map(e => {
+          if (e.id === newData.id) {
+            return { ...e, ...newElementData };
+          }
+
+          return e;
+        })
     }, () => this._updateState(cb));
   }
 
@@ -136,7 +176,7 @@ class Dropzone extends Component {
    * function will further call `updateState` from state API, which updates the application state
    * @param cb {function} - callback function - optional
    */
-  _updateState = (cb = () => {}) => {
+  _updateState = (cb = () => {}, dispatchElementRemove) => {
     const {
       id: dropzoneID,
       parentID
@@ -146,7 +186,8 @@ class Dropzone extends Component {
       dropzoneID,
       parentID,
       this.state.droppedElements,
-      cb
+      cb,
+      dispatchElementRemove
     );
   }
 
@@ -247,6 +288,7 @@ class Dropzone extends Component {
     const {
       id: dropzoneID,
       capacity,
+      parentID,
       allowHorizontal
     } = this.props;
     const dropPosition = core.getDropPostion();
@@ -286,10 +328,13 @@ class Dropzone extends Component {
       ...updatedData,
       key: updatedData.id,
       dropzoneID,
+      parentID,
       allowHorizontal,
       showBasicContent: false,
       updateState: this._updateState,
       removeElement: this._removeElement,
+      updateElement: this._updateElement,
+      // initialElements helps figuring out initDone
       initialElements: this.state.initialElements,
       flushDroppedElements: this._flushDroppedElements,
       checkAndRemoveElement: this._checkAndRemoveElement
