@@ -149,18 +149,18 @@ class Dropzone extends Component {
     }
 
     // support is limited to below keys only, to avoid possible breaks
-    const supoortedKeys = ['name', 'type', 'payload'];
+    const supportedKeys = ['name', 'type', 'payload'];
     const newElementData = {};
     Object.keys(newData)
-      .forEach(key => {
-        if (supoortedKeys.indexOf(key) !== -1) {
+      .forEach((key) => {
+        if (supportedKeys.indexOf(key) !== -1) {
           newElementData[key] = newData[key];
         }
       });
 
     this.setState({
       droppedElements: this.state.droppedElements
-        .map(e => {
+        .map((e) => {
           if (e.id === newData.id) {
             return { ...e, ...newElementData };
           }
@@ -168,6 +168,8 @@ class Dropzone extends Component {
           return e;
         })
     }, () => this._updateState(cb));
+
+    return true;
   }
 
   /**

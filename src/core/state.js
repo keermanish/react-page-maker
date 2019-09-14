@@ -1,4 +1,3 @@
-import core from './core';
 import rpmEvent from './event';
 
 class State {
@@ -118,9 +117,9 @@ class State {
             }
           }
         }
-      } else {
-        return foundParent;
       }
+
+      return foundParent;
     };
 
     /**
@@ -137,7 +136,7 @@ class State {
       }
 
       return null;
-    }
+    };
 
     /**
      * private function to remove the field
@@ -152,41 +151,14 @@ class State {
 
       if (element) {
         element.removeElement(elementID, cb);
-        rpmEvent.notifyElementRemove({ elementID, dropzoneID, parentID, trashed: false });
+        rpmEvent.notifyElementRemove({
+          elementID, dropzoneID, parentID, trashed: false
+        });
         return true;
       }
 
       return false;
-    }
-
-    /**
-     * private function to update the exisiting field
-     * @param {String} elementID
-     * @param {String} dropzoneID
-     * @param {String} parentID
-     * @param {Element/Object} newData - { id, type, name, payload }
-     * @param {Function} cb
-     * @returns {Boolean}
-     */
-    const updateElement = (elementID, dropzoneID, parentID, newData, cb) => {
-      const element = traverseAndReturnElement(elementID, dropzoneID, parentID);
-
-      if (element) {
-        element.updateElement({
-          ...newData,
-          id: elementID
-        }, cb);
-
-        rpmEvent.notifyElementUpdate(getElement(elementID, dropzoneID, parentID));
-
-        return true;
-      }
-
-      return false;
-    }
-
-    // function to return element, filter sensitive props before return
-    const getElement = (...args) => removeSensitiveProps(traverseAndReturnElement(...args));
+    };
 
     /**
      * function to filter out sensitive information from element
@@ -217,7 +189,36 @@ class State {
       });
 
       return shareableElement;
-    }
+    };
+
+    // function to return element, filter sensitive props before return
+    const getElement = (...args) => removeSensitiveProps(traverseAndReturnElement(...args));
+
+    /**
+     * private function to update the exisiting field
+     * @param {String} elementID
+     * @param {String} dropzoneID
+     * @param {String} parentID
+     * @param {Element/Object} newData - { id, type, name, payload }
+     * @param {Function} cb
+     * @returns {Boolean}
+     */
+    const updateElement = (elementID, dropzoneID, parentID, newData, cb) => {
+      const element = traverseAndReturnElement(elementID, dropzoneID, parentID);
+
+      if (element) {
+        element.updateElement({
+          ...newData,
+          id: elementID
+        }, cb);
+
+        rpmEvent.notifyElementUpdate(getElement(elementID, dropzoneID, parentID));
+
+        return true;
+      }
+
+      return false;
+    };
 
     // function to traverse through all node
     // remove all private/functional properties
