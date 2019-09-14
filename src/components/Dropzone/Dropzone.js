@@ -87,7 +87,6 @@ class Dropzone extends Component {
     // for first time add initialElements to droppedElements
     if (gotInitialItems) {
       const { id: dropzoneID, parentID } = this.props;
-      console.log('during load', parentID);
       const updatedInitialItems = initialElements.map(e => ({
         ...e,
         key: e.id,

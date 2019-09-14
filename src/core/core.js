@@ -68,20 +68,14 @@ class Core {
      * @param {String} message - any message to be print
      * @returns {Boolean}
      */
-    this.error = (message) => {
-      console.error(message);
-      return false;
-    };
+    this.error = console.error;
 
     /**
      * function to log a message
      * @param {String} message - any message to be print
      * @returns {Boolean}
      */
-    this.log = (message) => {
-      console.log(message);
-      return true;
-    };
+    this.log = console.log;
   }
 }
 
