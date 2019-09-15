@@ -296,16 +296,16 @@ npm install --save react-page-maker
 
     ```Javascript
       onSomeAction = () => {
-        // Note - make sure you are passign valid data else state service may break
+        // Note - make sure you are passing valid data else state service may break
 
-        // 1 - pass array if your just going to reset the dropzone
+        // 1 - pass an array if you are just going to reset the dropzone
         const current = this.currentDropzone.current;
         current && current.dangerouslySetElements([element1, element2]);
         // element type should be similar to what you are passing in pallete
 
         // or
 
-        // 2 - pass function which will give you the current elements that dropzone holds, and then you can make necessary tweaks
+        // 2 - pass a function which will give you the current elements that dropzone holds, and then you can make necessary tweaks
         const current = this.currentDropzone.current;
         current && current.dangerouslySetElements((currentElements) => currentElements
           .map(doSomeTweaks));
@@ -436,7 +436,7 @@ npm install --save react-page-maker
      * @param {string} elementID - every elements gets id under props
      * @param {string} dropzoneID - every elements gets dropzoneID under props
      * @param {string} parentID - every elements gets parentID under props
-     * @param {string} newData - value that needs to be set, { name, type, payload }
+     * @param {Object} newData - value that needs to be set, { name, type, payload }
      * @param {function} cb - success callback function
      * @returns {Boolean}
     */
@@ -452,7 +452,7 @@ npm install --save react-page-maker
 
     /**
     * Function to add event
-    * @param {String} event - name of event, supported event are 'change', 'flush',
+    * @param {String} event - name of event, supported events are 'change', 'flush',
     * 'removeElement', 'updateElement'
     * @param {Function} cb - function gets called upon event trigger
     * @param {Object} newState - new state
@@ -464,7 +464,7 @@ npm install --save react-page-maker
 
     /**
     * Function to remove event
-    * @param {String} event - name of event, supported event are 'change', 'flush','removeElement', 'updateElement'
+    * @param {String} event - name of event, supported events are 'change', 'flush','removeElement', 'updateElement'
     * @param {Function} oldEventInstance - instance of previously attached event
     */
     state.removeEventListener('change', cb);
