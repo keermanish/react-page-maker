@@ -90,7 +90,7 @@ npm install --save react-page-maker
 
     **Note**- For drag behaviour, wrap the element with `Draggable` component and make sure all props gets passed to it.
 
-  - #### Create Layout #### (If you want more complex/nested structure)
+  - #### Create Layout (If you want more complex/nested structure) ####
 
     Here the steps are very similar to element, after all layouts are also one type of element but only difference is that they have some dropzone wherein you can drop an elements to form the page structure. To create such dropezon we have `Dropzone` component. Layout can have one or many dropzones but make sure each dropzone has unique identifier.
 
@@ -390,7 +390,7 @@ npm install --save react-page-maker
   | getElement      | function | returns details of element |
   | removeElement      | function | remove element from tree |
   | updateElement      | function | update specific element |
-  | addEventListener      | function | to add event, supported events `change | flush | removeElement | updateElement` |
+  | addEventListener      | function | to add event, supported events `change, flush, removeElement, updateElement` |
   | removeEventListener      | function | to remove event, pass proper event cb |
 
   - **Syntax**
