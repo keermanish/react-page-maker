@@ -38,6 +38,7 @@ npm install --save react-page-maker
     - pallete version
     - cavas version
     - preview version
+
     In pallete and canvas version element should have drag feature which can be achieve through `Draggable` component.
 
     ```Javascript
