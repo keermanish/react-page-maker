@@ -3,9 +3,10 @@
 
 React-page-maker, A drag-drop featured lib which will help you to build the layout and generate the markup or JSON out of it, This markup or JSON you can store at server side or anywhere based on your requirement and use it later.
 
-Library is designed in such way that you will get enough flexiblity interms of defining the any type of elements/layout which you are going to use through out the application.
+Library is designed in such a way that you will get enough flexibility in terms of defining any type of elements/layout which you are going to use throughout the application.
 
-If you are building custom layout builder/dashboard then probably you are in right place! :)
+If you are building custom layout builder/dashboard then probably you are in the right place! :)
+
 
 # Install #
 ```shell
@@ -18,7 +19,7 @@ npm install --save react-page-maker
 1. Define the type of elements
 2. Create and Register elements/layouts
 3. Render Palette and Canvas
-4. [Working example](https://github.com/keermanish/example-react-page-maker.git)
+4. [Working example](https://example-react-page-maker.herokuapp.com/) - [Git repo](https://github.com/keermanish/example-react-page-maker.git)
 
 
 ### Define the type of elements ###
@@ -35,11 +36,11 @@ npm install --save react-page-maker
   - #### Create element ####
 
     Every Elements should have three versions defined.
-    - pallete version
+    - palette version
     - cavas version
     - preview version
 
-    In pallete and canvas version element should have drag feature which can be achieve through `Draggable` component.
+    In palette and canvas version element should have drag feature which can be achieved through `Draggable` component.
 
     ```Javascript
     // DraggableTextbox.js
@@ -52,7 +53,7 @@ npm install --save react-page-maker
       // `showBasicContent` is default prop passed by `Palette` component
       const { showBasicContent, showPreview, name } = props;
 
-      if (showBasicContent) { // pallete version - content to be shown in palette list
+      if (showBasicContent) { // palette version - content to be shown in palette list
         return (
           <Draggable {...props}>
             <span>{name}</span>
@@ -93,7 +94,7 @@ npm install --save react-page-maker
 
   - #### Create Layout (If you want more complex/nested structure) ####
 
-    Here the steps are very similar to element, after all layouts are also one type of element but only difference is that they have some dropzone wherein you can drop an elements to form the page structure. To create such dropezon we have `Dropzone` component. Layout can have one or many dropzones but make sure each dropzone has unique identifier.
+    Here the steps are very similar to element, after all layouts are also one type of element but the only difference is that they have some dropzone wherein you can drop a elements to form the page structure. To create such dropezon we have `Dropzone` component. Layout can have one or many dropzones but make sure each dropzone has unique identifier.
 
     ```Javascript
       // DraggableGrid_1_2.js
@@ -103,7 +104,7 @@ npm install --save react-page-maker
         // make sure you are passing `dropzoneProps` prop to dropzone
         const { showBasicContent, showPreview, dropzoneProps, childNode, ...rest } = props;
 
-        if (showBasicContent) { // content to be shown in pallete
+        if (showBasicContent) { // content to be shown in palette
           return (
             <Draggable {...props} >
               <span>{ rest.name }</span>
@@ -159,7 +160,7 @@ npm install --save react-page-maker
       component: DragItemGridLayoutR1C2 // import from DraggableGrid_1_2.js
     }]);
     ```
-    After this step, application will be aware what type of elements we have and based on this types we can create as many fields required.
+    After this step, the application will be aware what type of elements we have and based on this types we can create as many fields required.
     e.g. from `elements.TEXTBOX` we can create any text field (First Name, Last Name, etc.)
 
     **Note** - Call `registerPaletteElements` function before you render palette. e.g. Inside `constructor` or `componentWillMount`
@@ -302,7 +303,7 @@ npm install --save react-page-maker
         // 1 - pass an array if you are just going to reset the dropzone
         const current = this.currentDropzone.current;
         current && current.dangerouslySetElements([element1, element2]);
-        // element type should be similar to what you are passing in pallete
+        // element type should be similar to what you are passing in palette
 
         // or
 
