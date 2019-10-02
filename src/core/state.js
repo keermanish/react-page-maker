@@ -1,12 +1,10 @@
-import core from './core';
+import rpmEvent from './event';
 
 class State {
   constructor() {
     // all private varibale goes here
     const state = {};
-    const event = {
-      change: []
-    };
+    const shareableElementProps = ['id', 'type', 'name', 'payload', 'dropzoneID', 'parentID'];
 
     // set base
     state.tree = [{
@@ -99,18 +97,127 @@ class State {
       return returnStatus;
     };
 
-    // private function to trigger all change CB
-    const notifyStateChange = () => {
-      // trigger all events
-      event.change.forEach(e => e(state.tree));
+    /**
+     * private function to traverse through each node and return the field parent
+     * @param {String} dropzoneID
+     * @param {String} parentID
+     * @param {Array} fields - fields/elements of current canvas
+     * @returns {Object} - Parent element
+     */
+    const traverseAndReturnParent = (dropzoneID, parentID, fields = state.tree) => {
+      const foundParent = fields.find(element => element.id === parentID);
+
+      if (!foundParent) {
+        for (let i = 0; i < fields.length; i++) {
+          const element = fields[i];
+          if (element.fields) {
+            const status = traverseAndReturnParent(dropzoneID, parentID, element.fields);
+            if (status) {
+              return status;
+            }
+          }
+        }
+      }
+
+      return foundParent;
     };
 
-    // function to update state
-    // once update done, triggers CB and notifyStateChange
-    this.updateState = (dropzoneID, parentID, fields, cb = () => {}) => {
-      traverseAndUpdateTree(dropzoneID, parentID, fields);
-      cb(state.tree);
-      notifyStateChange();
+    /**
+     * private function to traverse through each node and return the corresponding element
+     * @param {String} elementID
+     * @param {String} dropzoneID
+     * @param {String} parentID
+     * @returns {Field/Object}
+     */
+    const traverseAndReturnElement = (elementID, dropzoneID, parentID) => {
+      const fieldParent = traverseAndReturnParent(dropzoneID, parentID);
+      if (fieldParent) {
+        return fieldParent.fields.find(field => field.id === elementID);
+      }
+
+      return null;
+    };
+
+    /**
+     * private function to remove the field
+     * @param {String} elementID
+     * @param {String} dropzoneID
+     * @param {String} parentID
+     * @param {Function} cb
+     * @returns {Boolean}
+     */
+    const removeElement = (elementID, dropzoneID, parentID, cb) => {
+      const element = traverseAndReturnElement(elementID, dropzoneID, parentID);
+
+      if (element) {
+        element.removeElement(elementID, cb);
+        rpmEvent.notifyElementRemove({
+          elementID, dropzoneID, parentID, trashed: false
+        });
+        return true;
+      }
+
+      return false;
+    };
+
+    /**
+     * function to filter out sensitive information from element
+     * @param {Object} element
+     * @param {Boolean} onlyRemoveFunctions - in-case of `getStorableState` result we only
+     * need to filter out functions and in other cases we will filter out other props also
+     * based on `shareableElementProps`
+     * @returns {Boolean}
+     */
+    const removeSensitiveProps = (element, onlyRemoveFunctions) => {
+      const shareableElement = {};
+
+      if (!element) {
+        return null;
+      }
+
+      // remove all private/functinal properties
+      Object.keys(element).forEach((key) => {
+        if (
+          typeof element[key] !== 'function' &&
+          (
+            onlyRemoveFunctions ||
+            !onlyRemoveFunctions && shareableElementProps.indexOf(key) !== -1
+          )
+        ) {
+          shareableElement[key] = element[key];
+        }
+      });
+
+      return shareableElement;
+    };
+
+    // function to return element, filter sensitive props before return
+    const getElement = (...args) => removeSensitiveProps(traverseAndReturnElement(...args));
+
+    /**
+     * private function to update the exisiting field
+     * @param {String} elementID
+     * @param {String} dropzoneID
+     * @param {String} parentID
+     * @param {Element/Object} newData - { id, type, name, payload }
+     * @param {Function} cb
+     * @returns {Boolean}
+     */
+    const updateElement = (elementID, dropzoneID, parentID, newData, cb) => {
+      const element = traverseAndReturnElement(elementID, dropzoneID, parentID);
+
+      if (element) {
+        element.updateElement({
+          ...newData,
+          id: elementID
+        }, cb);
+
+        rpmEvent.notifyElementUpdate(getElement(elementID, dropzoneID, parentID));
+
+        return true;
+      }
+
+      return false;
     };
 
     // function to traverse through all node
@@ -118,14 +225,8 @@ class State {
     // and return flat object for each node
     const traverseAndTakeSnapshot = (element) => {
       const subFields = [];
-      const necessaryDetails = {};
-
-      // remove all private/functinal properties
-      Object.keys(element).forEach((key) => {
-        if (typeof element[key] !== 'function') {
-          necessaryDetails[key] = element[key];
-        }
-      });
+      // remove all functinal properties
+      const necessaryDetails = removeSensitiveProps(element, true);
 
       // check for sub fields and perform same operations recursively
       if (element.fields && element.fields.length) {
@@ -148,6 +249,37 @@ class State {
       // return flat object which represent current node in tree
       return necessaryDetails;
     };
+
+    // function to update the state
+    // once update is done then triggers CB and notifyStateChange
+    this.updateState = (dropzoneID, parentID, fields, cb = () => {}, dispatchElementRemove) => {
+      traverseAndUpdateTree(dropzoneID, parentID, fields);
+      cb(state.tree);
+      rpmEvent.notifyStateChange();
+
+      // dispatch elementRemove event if necessary
+      if (dispatchElementRemove) {
+        rpmEvent.notifyElementRemove({
+          dropzoneID,
+          parentID,
+          dispatchElementRemove,
+          // just to distinguish whether field removed from `removeField` API or trash component
+          trashed: true
+        });
+      }
+    };
+
+    // function to return element parent
+    this.getElementParent = traverseAndReturnParent;
+
+    // function to return element
+    this.getElement = getElement;
+
+    // function to remove element
+    this.removeElement = removeElement;
+
+    // function to update element
+    this.updateElement = updateElement;
 
     /**
      * function to return current state of tree (as is)
@@ -176,14 +308,14 @@ class State {
 
       // canvas is empty, just notify other
       if (!rootNode.fields.length) {
-        notifyStateChange();
+        rpmEvent.notifyStateFlush();
         cb();
       }
 
       rootNode.fields.forEach((topLevelElement, i) => {
         topLevelElement.flushDroppedElements(() => {
           if (i === topLevelFields - 1) {
-            notifyStateChange();
+            rpmEvent.notifyStateFlush(true);
             cb();
           }
         });
@@ -197,37 +329,14 @@ class State {
      * @param {String} eventName
      * @param {function} cb - callback
      */
-    this.addEventListener = (eventName, cb) => {
-      let returnCB = null;
-
-      if (typeof cb !== 'function') {
-        core.error('`cb` param has to be function');
-        return false;
-      }
-
-      if (Object.prototype.hasOwnProperty.call(event, eventName)) {
-        event[eventName].push(cb);
-
-        returnCB = cb;
-      } else {
-        core.error('No such event');
-      }
-
-      return returnCB;
-    };
+    this.addEventListener = rpmEvent.addEventListener;
 
     /**
      * function to remove event
      * @param {String} eventName
      * @param {function} cb - callback
      */
-    this.removeEventListener = (eventName, cb) => {
-      if (Object.prototype.hasOwnProperty.call(event, eventName)) {
-        event[eventName] = event[eventName].filter(e => e !== cb);
-      } else {
-        core.error('No such event');
-      }
-    };
+    this.removeEventListener = rpmEvent.removeEventListener;
   }
 }
 

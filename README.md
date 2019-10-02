@@ -1,9 +1,12 @@
 # [React Page Maker](https://www.npmjs.com/package/react-page-maker)
 [![npm version](https://badge.fury.io/js/react-page-maker.svg)](https://badge.fury.io/js/react-page-maker)
 
-A react package which will help you to generate the **meta data(JSON)** based on the selection of UI elements.
+React-page-maker, A drag-drop featured lib which will help you to build the layout and generate the markup or JSON out of it, This markup or JSON you can store at server side or anywhere based on your requirement and use it later.
 
-Library provides feature of Drag and Drop, where you can drag the UI elements from palette and drop it into appropriate dropzone/canvas.
+Library is designed in such a way that you will get enough flexibility in terms of defining any type of elements/layout which you are going to use throughout the application.
+
+If you are building custom layout builder/dashboard then probably you are in the right place! :)
+
 
 # Install #
 ```shell
@@ -16,11 +19,11 @@ npm install --save react-page-maker
 1. Define the type of elements
 2. Create and Register elements/layouts
 3. Render Palette and Canvas
-4. [Working example](https://github.com/keermanish/example-react-page-maker.git)
+4. [Working example](https://example-react-page-maker.herokuapp.com/) - [Git repo](https://github.com/keermanish/example-react-page-maker.git)
 
 
 ### Define the type of elements ###
-  - Every element/layout has mandatory `type` property. It helps to render corresponding component.
+  - Every element/layout has mandatory `type` property. Based on type we decide what component to load for that element/layout.
     ```Javascript
     // Const.js
     export const elements = {
@@ -30,9 +33,14 @@ npm install --save react-page-maker
     ```
 
 ### Create and Register elements/Layouts ###
-  - **Create element**
+  - #### Create element ####
 
-    Elements/Layouts should have drag feature. To acheive the same we will use `Draggable` component.
+    Every Elements should have three versions defined.
+    - palette version
+    - cavas version
+    - preview version
+
+    In palette and canvas version element should have drag feature which can be achieved through `Draggable` component.
 
     ```Javascript
     // DraggableTextbox.js
@@ -45,7 +53,7 @@ npm install --save react-page-maker
       // `showBasicContent` is default prop passed by `Palette` component
       const { showBasicContent, showPreview, name } = props;
 
-      if (showBasicContent) { // content to be shown in palette list
+      if (showBasicContent) { // palette version - content to be shown in palette list
         return (
           <Draggable {...props}>
             <span>{name}</span>
@@ -53,7 +61,7 @@ npm install --save react-page-maker
         );
       }
 
-      if (showPreview) { // content to be shown in preview mode - end result
+      if (showPreview) { // preview version - content to be shown in preview mode - end result, no need of `Draggable`
         return (
           <FormGroup>
             <Label>{name}</Label>
@@ -62,7 +70,7 @@ npm install --save react-page-maker
         );
       }
 
-      return ( // content to be shown in canvas
+      return ( // cavas version - content to be shown in canvas
         <Draggable {...props}>
           <FormGroup>
             <Label>{name}</Label>
@@ -84,9 +92,9 @@ npm install --save react-page-maker
 
     **Note**- For drag behaviour, wrap the element with `Draggable` component and make sure all props gets passed to it.
 
-  - **Create Layout** (If you want more complex/nested structure)
+  - #### Create Layout (If you want more complex/nested structure) ####
 
-    Here steps are very similar to above but we would be having some dropzones where we can drop elements.
+    Here the steps are very similar to element, after all layouts are also one type of element but the only difference is that they have some dropzone wherein you can drop a elements to form the page structure. To create such dropezon we have `Dropzone` component. Layout can have one or many dropzones but make sure each dropzone has unique identifier.
 
     ```Javascript
       // DraggableGrid_1_2.js
@@ -96,7 +104,7 @@ npm install --save react-page-maker
         // make sure you are passing `dropzoneProps` prop to dropzone
         const { showBasicContent, showPreview, dropzoneProps, childNode, ...rest } = props;
 
-        if (showBasicContent) { // content to be shown in pallete
+        if (showBasicContent) { // content to be shown in palette
           return (
             <Draggable {...props} >
               <span>{ rest.name }</span>
@@ -139,7 +147,7 @@ npm install --save react-page-maker
       - `dropzoneProps` is by default available under props
 
 
-  - **Register Elements**
+  - #### Register Elements ####
     ```Javascript
     import { registerPaletteElements } from 'react-page-maker';
 
@@ -152,7 +160,7 @@ npm install --save react-page-maker
       component: DragItemGridLayoutR1C2 // import from DraggableGrid_1_2.js
     }]);
     ```
-    After this step, application will be aware what type of elements we have and based on this types we can create as many fields required.
+    After this step, the application will be aware what type of elements we have and based on this types we can create as many fields required.
     e.g. from `elements.TEXTBOX` we can create any text field (First Name, Last Name, etc.)
 
     **Note** - Call `registerPaletteElements` function before you render palette. e.g. Inside `constructor` or `componentWillMount`
@@ -216,7 +224,7 @@ npm install --save react-page-maker
 
 ## Components ##
 
-- **Draggable**
+- #### Draggable ####
 
   | Prop        | Type           | Description  |
   | ------------- |:-------------:| -----|
@@ -226,13 +234,13 @@ npm install --save react-page-maker
   | type      | String      |   Defines type of an element  |
   | payload | Object      |    Any custom data that you want to pass |
 
-- **Palette**
+- #### Palette ####
 
   | Prop        | Type           | Description  |
   | ------------- |:-------------:| -----|
   | paletteElements      | Array | Array of element(Object) to be shown inside palette |
 
-- **Dropzone**
+- #### Dropzone ####
 
   | Prop        | Type           | Description  |
   | ------------- |:-------------:| -----|
@@ -246,7 +254,7 @@ npm install --save react-page-maker
 
 
     ```Javascript
-    /**
+    /*
      * function gets triggered once element got dropped
      * @param {Object} data - It holds element information
      * @param {Function} cb - A callback function, which helps to decide whether to add element or not.
@@ -286,17 +294,21 @@ npm install --save react-page-maker
     />
     ```
 
-    Note - If is there any situation where you need to update the dropzone state manually then you can use `dangerouslySetElements` function
+    **Note** - If is there any situation where you need to update the dropzone state manually then you can use `dangerouslySetElements` function, this gives you direct access to dropzone state. May be you can refer `state.updateElement|state.removeElement` API if that fulfills your requirement.
 
     ```Javascript
       onSomeAction = () => {
-        // Note - make sure you are passign valid data, else state service may break
+        // Note - make sure you are passing valid data else state service may break
+
+        // 1 - pass an array if you are just going to reset the dropzone
         const current = this.currentDropzone.current;
         current && current.dangerouslySetElements([element1, element2]);
-        // element type should be similar to what you are passing in pallete
+        // element type should be similar to what you are passing in palette
 
         // or
 
+        // 2 - pass a function which will give you the current elements that dropzone holds, and then you can make necessary tweaks
+        const current = this.currentDropzone.current;
         current && current.dangerouslySetElements((currentElements) => currentElements
           .map(doSomeTweaks));
       }
@@ -307,12 +319,13 @@ npm install --save react-page-maker
       />
     ```
 
-- **Canvas**
-  This Component is extended version of Dropzone with some default properties (e.g. `ID`) in it.
+- #### Canvas ####
 
-- **Trash**
+  This is a top level dropzone element from where we actually starts drag-drop. `Canvas` is extended version of `Dropzone` with some default properties (e.g. `ID`) defined.
 
-  You can use this component to have feature of trash/delete. Once element dropped in Trash it get removed from canvas and state.
+- #### Trash ####
+
+  You can use this component to have feature of trash/delete box. Once element dropped inside Trash then it gets removed from canvas and state.
 
   | Prop        | Type           | Description  |
   | ------------- |:-------------:| -----|
@@ -340,8 +353,9 @@ npm install --save react-page-maker
       <Trash onBeforeTrash={this._onBeforeTrash} onAfterTrash={this._onAfterTrash} />
     ```
 
-- **Preview**
-  Use this component to show the preview version of current state (End Output). Make sure every draggable elements is returning something on `showPreview`
+- #### Preview ####
+
+  Use this component to show the preview version of current state (End Output or markup). Make sure every draggable elements is returning something on `showPreview`
 
   **Syntax**
     ```Javascript
@@ -361,7 +375,7 @@ npm install --save react-page-maker
     </Preview>
     ```
 
-    Note - Refer [Create and Register elements/layouts](#create-and-register-elementslayouts) section to know the necessary changes in draggable elements.
+    **Note** - Refer [Create and Register elements/layouts](#create-and-register-elementslayouts) section to know how we define preview version inside draggable element/layout.
 
 ## API ##
 
@@ -372,8 +386,13 @@ npm install --save react-page-maker
   | Prop        | Type           | Description  |
   | ------------- |:-------------:| -----|
   | getState      | function | returns current state of canvas |
+  | getStorableState      | function | returns current state which can be stored at servers side for future use |
   | clearState      | function | flush current state |
-  | addEventListener      | function | to add event `change` |
+  | getElementParent      | function | returns parent layout element |
+  | getElement      | function | returns details of element |
+  | removeElement      | function | remove element from tree |
+  | updateElement      | function | update specific element |
+  | addEventListener      | function | to add event, supported events `change, flush, removeElement, updateElement` |
   | removeEventListener      | function | to remove event, pass proper event cb |
 
   - **Syntax**
@@ -383,6 +402,47 @@ npm install --save react-page-maker
 
     /* Function to get current state of the canvas */
     state.getState();
+
+    /* Function to get current state of the canvas which can be parsed to string with help of  `JSON.stringfy` and later we can store it at server side */
+    state.getStorableState();
+
+    /**
+     * function to return parent of element
+     * @param {string} dropzoneID - every elements gets dropzoneID under props
+     * @param {string} parentID - every elements gets parentID under props
+     * @returns {Object} layout element
+    */
+    state.getElementParent(dropzoneID, parentID);
+
+    /**
+     * function to return element details
+     * @param {string} elementID - every elements gets id under props
+     * @param {string} dropzoneID - every elements gets dropzoneID under props
+     * @param {string} parentID - every elements gets parentID under props
+     * @returns {Object} element
+    */
+    state.getElement(elementID, dropzoneID, parentID);
+
+    /**
+     * function to remove element from tree
+     * @param {string} elementID - every elements gets id under props
+     * @param {string} dropzoneID - every elements gets dropzoneID under props
+     * @param {string} parentID - every elements gets parentID under props
+     * @param {function} cb - success callback function
+     * @returns {Boolean}
+    */
+    state.removeElement(elementID, dropzoneID, parentID, cb);
+
+    /**
+     * function to update an element details, you can update name, type, payload properties
+     * @param {string} elementID - every elements gets id under props
+     * @param {string} dropzoneID - every elements gets dropzoneID under props
+     * @param {string} parentID - every elements gets parentID under props
+     * @param {Object} newData - value that needs to be set, { name, type, payload }
+     * @param {function} cb - success callback function
+     * @returns {Boolean}
+    */
+    state.updateElement(elementID, dropzoneID, parentID, newData, cb);
 
     /**
     * Function to flush canvas/current state
@@ -394,7 +454,8 @@ npm install --save react-page-maker
 
     /**
     * Function to add event
-    * @param {String} event - name of event, For now we are supporting 'change' event
+    * @param {String} event - name of event, supported events are 'change', 'flush',
+    * 'removeElement', 'updateElement'
     * @param {Function} cb - function gets called upon event trigger
     * @param {Object} newState - new state
     * @returns {Function} - instance of attached function
@@ -405,7 +466,7 @@ npm install --save react-page-maker
 
     /**
     * Function to remove event
-    * @param {String} event - name of event, For now we are supporting 'change' event
+    * @param {String} event - name of event, supported events are 'change', 'flush','removeElement', 'updateElement'
     * @param {Function} oldEventInstance - instance of previously attached event
     */
     state.removeEventListener('change', cb);

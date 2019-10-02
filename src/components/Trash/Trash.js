@@ -48,7 +48,7 @@ class Trash extends Component {
       removeElement(elementToBeTrashed.elementID, () => {
         // acknowledge
         onAfterTrash();
-      });
+      }, true); // true - dispatch `removeElement` event
 
       // done dragging, flush the dragged element
       core.setDraggedElement(null);
