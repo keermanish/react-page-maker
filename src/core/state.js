@@ -65,7 +65,11 @@ class State {
             // no new fields
             if (!fieldsToBeAdded.length) {
               // either user has updated the field or changed the order
-              matchedParentCanvas.fields = updatedFields;
+              matchedParentCanvas.fields = matchedParentCanvas.fields
+                .map((f) => {
+                  const uF = updatedFields.find(uf => uf.id === f.id);
+                  return uF || f;
+                });
             }
           }
 
