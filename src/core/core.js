@@ -45,7 +45,7 @@ class Core {
      * function to return registered palette elements
      * @returns {Array} - array of palette elements
      */
-    this.getRegisteredPaletteElements = () => (core.registeredPaletteElements);
+    this.getRegisteredPaletteElements = () => (core.registeredPaletteElements || []);
 
     /**
      * function to set drop position

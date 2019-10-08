@@ -95,6 +95,7 @@ class Dropzone extends Component {
         showBasicContent: false,
         updateState: this._updateState,
         removeElement: this._removeElement,
+        updateElement: this._updateElement,
         flushDroppedElements: this._flushDroppedElements,
         checkAndRemoveElement: this._checkAndRemoveElement
       }));

@@ -37,7 +37,7 @@ npm install --save react-page-maker
 
     Every Elements should have three versions defined.
     - palette version
-    - cavas version
+    - canvas version
     - preview version
 
     In palette and canvas version element should have drag feature which can be achieved through `Draggable` component.
@@ -70,7 +70,7 @@ npm install --save react-page-maker
         );
       }
 
-      return ( // cavas version - content to be shown in canvas
+      return ( // canvas version - content to be shown in canvas
         <Draggable {...props}>
           <FormGroup>
             <Label>{name}</Label>
