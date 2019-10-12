@@ -13,13 +13,13 @@ If you are building custom layout builder/dashboard then probably you are in the
 npm install --save react-page-maker
 ```
 
-[![Demo](https://img.youtube.com/vi/2yzeqrZA5v0/0.jpg)](https://example-react-page-maker.herokuapp.com/)
+[![Demo](https://img.youtube.com/vi/2yzeqrZA5v0/0.jpg)](https://example-react-page-make.netlify.com/)
 
 # How to use #
 1. Define the type of elements
 2. Create and Register elements/layouts
 3. Render Palette and Canvas
-4. [Working example](https://example-react-page-maker.herokuapp.com/) - [Git repo](https://github.com/keermanish/example-react-page-maker.git)
+4. [Working example](https://example-react-page-make.netlify.com/) - [Git repo](https://github.com/keermanish/example-react-page-maker.git)
 
 
 ### Define the type of elements ###
