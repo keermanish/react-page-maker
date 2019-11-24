@@ -64,6 +64,8 @@ class State {
 
             // no new fields
             if (!fieldsToBeAdded.length) {
+              matchedParentCanvas.fields = updatedFields;
+
               // either user has updated the field or changed the order
               matchedParentCanvas.fields = matchedParentCanvas.fields
                 .map((f) => {
