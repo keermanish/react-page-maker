@@ -24,7 +24,10 @@ class Dropzone extends Component {
 
   
 
-	findFields( fields ){
+  findFields( fields ){
+		if (!fields) {
+			return false
+		}
 		for (let i = 0; i < fields.length; i++) {
 			const element = fields[i];
 			if (element.id==this.props.parentID) {
@@ -37,6 +40,7 @@ class Dropzone extends Component {
 		}
 		return false
 	}
+
 
 
 	componentWillMount() {	
