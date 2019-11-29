@@ -22,9 +22,38 @@ class Dropzone extends Component {
     };
   }
 
-  componentWillMount() {
-    this._setInitialElements(this.props.initialElements);
-  }
+  
+
+	findFields( fields ){
+		for (let i = 0; i < fields.length; i++) {
+			const element = fields[i];
+			if (element.id==this.props.parentID) {
+		
+				return element.initialElements
+			}
+			else if (  element.initialElements && element.initialElements.length>0  ) {
+				this.findFields(  element.fields  )
+			}		
+		}
+		return false
+	}
+
+
+	componentWillMount() {	
+		 this._setInitialElements(this.props.initialElements);
+		 
+		 state.addEventListener("change", (newState) => {
+			 const currentState =  state.getStorableState()
+			 const fields = this.findFields( currentState )
+			 
+			 if (fields) {
+				this.setState({
+					droppedElements:fields
+				 })
+			 }
+		
+		  });
+	}
 
   componentWillReceiveProps({ initialElements }) {
     this._setInitialElements(initialElements);
