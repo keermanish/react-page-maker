@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import state from '../../core/state';
 import core from '../../core/core';
+import rpmEvent from '../../core/event';
 
 class Dropzone extends Component {
   constructor(props) {
@@ -24,6 +25,36 @@ class Dropzone extends Component {
 
   componentWillMount() {
     this._setInitialElements(this.props.initialElements);
+
+    if (this.props.id === 'root') {
+      rpmEvent.addEventListener('stateReset', (elements) => {
+        console.log('stateReset elements', elements);
+        const { id: dropzoneID, parentID } = this.props;
+        const updatedInitialItems = elements.map(e => ({
+          ...e,
+          key: e.id,
+          dropzoneID,
+          parentID,
+          showBasicContent: false,
+          skipStateUpdate: true,
+          updateState: this._updateState,
+          removeElement: this._removeElement,
+          updateElement: this._updateElement,
+          flushDroppedElements: this._flushDroppedElements,
+          checkAndRemoveElement: this._checkAndRemoveElement
+        }));
+
+        this.setState({
+          initialElements: updatedInitialItems,
+          droppedElements: updatedInitialItems,
+          initDone: false
+        }, () => {
+          this.setState({
+            initDone: true
+          })
+        });
+      })
+    }
   }
 
   componentWillReceiveProps({ initialElements }) {
@@ -62,7 +93,7 @@ class Dropzone extends Component {
     this.setState({
       initialElements: elements,
       droppedElements: elements
-    }, () => this._updateState(done));
+    }, () => this._updateState(done, false, false));
   }
 
   /**
@@ -178,18 +209,23 @@ class Dropzone extends Component {
    * function will further call `updateState` from state API, which updates the application state
    * @param cb {function} - callback function - optional
    */
-  _updateState = (cb = () => {}, dispatchElementRemove) => {
+  _updateState = (cb = () => {}, dispatchElementRemove, trackActivity = true) => {
     const {
       id: dropzoneID,
       parentID
     } = this.props;
+
+    if (!this.state.initDone && this.props.skipStateUpdate) {
+      return false;
+    }
 
     state.updateState(
       dropzoneID,
       parentID,
       this.state.droppedElements,
       cb,
-      dispatchElementRemove
+      dispatchElementRemove,
+      trackActivity
     );
   }
 
@@ -443,6 +479,7 @@ Dropzone.propTypes = {
   capacity: PropTypes.number,
   onDrop: PropTypes.func,
   onElementMove: PropTypes.func,
+  skipStateUpdate: PropTypes.bool,
   allowHorizontal: PropTypes.bool,
   initialElements: PropTypes.arrayOf(Object),
   parentID: PropTypes.string.isRequired,
