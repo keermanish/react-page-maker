@@ -4,6 +4,7 @@ class State {
   constructor() {
     // all private varibale goes here
     const state = {};
+    this.stack = [];
     const shareableElementProps = ['id', 'type', 'name', 'payload', 'dropzoneID', 'parentID'];
 
     // set base
@@ -256,10 +257,21 @@ class State {
 
     // function to update the state
     // once update is done then triggers CB and notifyStateChange
-    this.updateState = (dropzoneID, parentID, fields, cb = () => {}, dispatchElementRemove) => {
+    this.updateState = (
+      dropzoneID,
+      parentID,
+      fields,
+      cb = () => {},
+      dispatchElementRemove,
+      trackActivity
+    ) => {
       traverseAndUpdateTree(dropzoneID, parentID, fields);
       cb(state.tree);
       rpmEvent.notifyStateChange();
+
+      if (trackActivity) {
+        this.stack.push(JSON.stringify(this.getStorableState()));
+      }
 
       // dispatch elementRemove event if necessary
       if (dispatchElementRemove) {
@@ -272,6 +284,13 @@ class State {
         });
       }
     };
+
+    this.resetState = (level) => {
+      if (this.stack[level]) {
+        console.log('level', level, this.stack[level]);
+        rpmEvent.notifyStateReset(JSON.parse(this.stack[level]));
+      }
+    }
 
     // function to return element parent
     this.getElementParent = traverseAndReturnParent;

@@ -8,6 +8,7 @@ class RpmEvent {
     this.event = {
       change: [],
       flush: [],
+      stateReset: [],
       removeElement: [],
       updateElement: []
     };
@@ -40,6 +41,12 @@ class RpmEvent {
   notifyElementRemove = (element) => {
     // trigger all events
     this.event.removeElement.forEach(e => e(element));
+  };
+
+  // private function to trigger all state reset CB
+  notifyStateReset = (newState) => {
+    // trigger all events
+    this.event.stateReset.forEach(e => e(newState));
   };
 
   /**
