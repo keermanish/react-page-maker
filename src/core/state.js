@@ -285,6 +285,9 @@ class State {
     // function to update element
     this.updateElement = updateElement;
 
+    // funtion to get element details
+    this.traverseAndReturnElement = traverseAndReturnElement;
+
     /**
      * function to return current state of tree (as is)
      * keeping this function to give backward compatibility

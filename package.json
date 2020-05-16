@@ -1,6 +1,6 @@
 {
   "name": "react-page-maker",
-  "version": "1.1.30",
+  "version": "1.1.31",
   "description": "React-page-maker, A drag-drop featured lib which will help you to build the page layout and generate the markup or JSON out of it. You can store this JSON at server side or anywhere based on your requirement and use it later for Preview. Library is designed in such a way that you will get enough flexibility in terms of defining any type of elements/layout which you are going to use throughout the application.",
   "main": "./dist/index.js",
   "scripts": {
