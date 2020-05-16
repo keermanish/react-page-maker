@@ -396,7 +396,7 @@ class Dropzone extends Component {
     // adding dropping class to dropzone, it can be used for animation purpose
     this.canvasRef.current.classList.add('dropping');
     setTimeout(() => {
-      this.canvasRef.current.classList.remove('dropping');
+      this.canvasRef.current && this.canvasRef.current.classList.remove('dropping');
     }, 500);
 
     return {
