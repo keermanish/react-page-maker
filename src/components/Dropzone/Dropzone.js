@@ -326,6 +326,22 @@ class Dropzone extends Component {
       });
     }
 
+    let initialElementsToBind = null;
+    if (updatedData.parentID && updatedData.dropzoneID) {
+      const oldCopy = state.traverseAndReturnElement(updatedData.id, updatedData.dropzoneID, updatedData.parentID);
+      initialElementsToBind = oldCopy && oldCopy.fields || [];
+      const assignInitialElements = (list) => {
+        list.forEach(e => {
+          if (e.fields) {
+            e.initialElements = e.fields;
+            assignInitialElements(e.fields);
+          }
+        });
+      }
+
+      assignInitialElements(initialElementsToBind);
+    }
+
     const elementToDrop = {
       ...updatedData,
       key: updatedData.id,
@@ -337,7 +353,7 @@ class Dropzone extends Component {
       removeElement: this._removeElement,
       updateElement: this._updateElement,
       // initialElements helps figuring out initDone
-      initialElements: this.state.initialElements,
+      initialElements: initialElementsToBind || this.state.initialElements,
       flushDroppedElements: this._flushDroppedElements,
       checkAndRemoveElement: this._checkAndRemoveElement
     };
@@ -380,7 +396,7 @@ class Dropzone extends Component {
     // adding dropping class to dropzone, it can be used for animation purpose
     this.canvasRef.current.classList.add('dropping');
     setTimeout(() => {
-      this.canvasRef.current.classList.remove('dropping');
+      this.canvasRef.current && this.canvasRef.current.classList.remove('dropping');
     }, 500);
 
     return {
