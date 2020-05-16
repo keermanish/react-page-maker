@@ -327,7 +327,7 @@ class Dropzone extends Component {
     }
 
     let initialElementsToBind = null;
-    if (updatedData.parentID && updatedData.dropzoneID) {
+    if (updatedData.dropzoneID && updatedData.parentID) {
       const oldCopy = state.traverseAndReturnElement(updatedData.id, updatedData.dropzoneID, updatedData.parentID);
       initialElementsToBind = oldCopy && oldCopy.fields || [];
       const assignInitialElements = (list) => {

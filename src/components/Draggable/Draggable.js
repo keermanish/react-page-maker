@@ -35,6 +35,7 @@ class Draggable extends Component {
       name,
       fields,
       payload,
+      parentID,
       dropzoneID,
       removeElement,
       checkAndRemoveElement
@@ -44,7 +45,9 @@ class Draggable extends Component {
       id,
       type,
       name,
-      payload
+      payload,
+      parentID,
+      dropzoneID
     };
 
     if (fields) {
@@ -163,6 +166,7 @@ Draggable.propTypes = {
   spaceAvailable: PropTypes.bool,
   updateState: PropTypes.func,
   dropzoneID: PropTypes.string,
+  parentID: PropTypes.string,
   payload: PropTypes.instanceOf(Object),
   elementProps: PropTypes.instanceOf(Object),
   type: PropTypes.string.isRequired,
