@@ -1,7 +1,7 @@
 {
   "name": "react-page-maker",
-  "version": "1.1.28",
-  "description": "A react package which will help you to generate the meta data based on the selection of UI elements. Library provides feature of Drag and Drop, where you can drag the UI elements/layouts from palette and drop it into appropriate dropzone/canvas",
+  "version": "1.1.29",
+  "description": "React-page-maker, A drag-drop featured lib which will help you to build the page layout and generate the markup or JSON out of it. You can store this JSON at server side or anywhere based on your requirement and use it later for Preview. Library is designed in such a way that you will get enough flexibility in terms of defining any type of elements/layout which you are going to use throughout the application.",
   "main": "./dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

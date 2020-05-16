@@ -1,8 +1,9 @@
 # [React Page Maker](https://www.npmjs.com/package/react-page-maker)
 [![npm version](https://badge.fury.io/js/react-page-maker.svg)](https://badge.fury.io/js/react-page-maker)
+![npm bundle size](https://img.shields.io/bundlephobia/min/react-page-maker?color=%234EC827)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/fe14e498-5511-47a3-993c-6d0131568134/deploy-status)](https://app.netlify.com/sites/example-react-page-make/deploys)
 
-React-page-maker, A drag-drop featured lib which will help you to build the layout and generate the markup or JSON out of it, This markup or JSON you can store at server side or anywhere based on your requirement and use it later.
+React-page-maker, A drag-drop featured lib which will help you to build the page layout and generate the markup or JSON out of it. You can store this JSON at server side or anywhere based on your requirement and use it later for Preview.
 
 Library is designed in such a way that you will get enough flexibility in terms of defining any type of elements/layout which you are going to use throughout the application.
 
@@ -23,7 +24,7 @@ npm install --save react-page-maker
 4. [Working example](https://example-react-page-make.netlify.com/) - [Git repo](https://github.com/keermanish/example-react-page-maker.git)
 
 
-### Define the type of elements ###
+## Define the type of elements ##
   - Every element/layout has mandatory `type` property. Based on type we decide what component to load for that element/layout.
     ```Javascript
     // Const.js
@@ -33,8 +34,8 @@ npm install --save react-page-maker
     };
     ```
 
-### Create and Register elements/Layouts ###
-  - #### Create element ####
+## Create and Register elements/Layouts ##
+  - ### Create element ###
 
     Every Elements should have three versions defined.
     - palette version
@@ -93,7 +94,7 @@ npm install --save react-page-maker
 
     **Note**- For drag behaviour, wrap the element with `Draggable` component and make sure all props gets passed to it.
 
-  - #### Create Layout (If you want more complex/nested structure) ####
+  - ### Create Layout (If you want more complex/nested structure) ###
 
     Here the steps are very similar to element, after all layouts are also one type of element but the only difference is that they have some dropzone wherein you can drop a elements to form the page structure. To create such dropezon we have `Dropzone` component. Layout can have one or many dropzones but make sure each dropzone has unique identifier.
 
@@ -148,7 +149,7 @@ npm install --save react-page-maker
       - `dropzoneProps` is by default available under props
 
 
-  - #### Register Elements ####
+  - ### Register Elements ###
     ```Javascript
     import { registerPaletteElements } from 'react-page-maker';
 
@@ -166,7 +167,7 @@ npm install --save react-page-maker
 
     **Note** - Call `registerPaletteElements` function before you render palette. e.g. Inside `constructor` or `componentWillMount`
 
-### Render Palette and Canvas ###
+## Render Palette and Canvas ##
 
   Pass list of elements which we need to show inside palette (since not every time we will be using all elements).
 
@@ -225,7 +226,7 @@ npm install --save react-page-maker
 
 ## Components ##
 
-- #### Draggable ####
+- ### Draggable ###
 
   | Prop        | Type           | Description  |
   | ------------- |:-------------:| -----|
@@ -235,13 +236,13 @@ npm install --save react-page-maker
   | type      | String      |   Defines type of an element  |
   | payload | Object      |    Any custom data that you want to pass |
 
-- #### Palette ####
+- ### Palette ###
 
   | Prop        | Type           | Description  |
   | ------------- |:-------------:| -----|
   | paletteElements      | Array | Array of element(Object) to be shown inside palette |
 
-- #### Dropzone ####
+- ### Dropzone ###
 
   | Prop        | Type           | Description  |
   | ------------- |:-------------:| -----|
@@ -320,11 +321,11 @@ npm install --save react-page-maker
       />
     ```
 
-- #### Canvas ####
+- ### Canvas ###
 
   This is a top level dropzone element from where we actually starts drag-drop. `Canvas` is extended version of `Dropzone` with some default properties (e.g. `ID`) defined.
 
-- #### Trash ####
+- ### Trash ###
 
   You can use this component to have feature of trash/delete box. Once element dropped inside Trash then it gets removed from canvas and state.
 
@@ -354,7 +355,7 @@ npm install --save react-page-maker
       <Trash onBeforeTrash={this._onBeforeTrash} onAfterTrash={this._onAfterTrash} />
     ```
 
-- #### Preview ####
+- ### Preview ###
 
   Use this component to show the preview version of current state (End Output or markup). Make sure every draggable elements is returning something on `showPreview`
 
@@ -380,7 +381,7 @@ npm install --save react-page-maker
 
 ## API ##
 
-### State ###
+## State ##
 
   It provide access to the state object which holds all the meta data.
 
