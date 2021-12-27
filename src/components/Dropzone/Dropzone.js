@@ -80,9 +80,9 @@ class Dropzone extends Component {
     // current component state(droppedElements) doesn't hold any elements
     // but initialElements has some element to be set
     const gotInitialItems = Array.isArray(initialElements) &&
-                            initialElements.length &&
-                            !this.state.initDone &&
-                            !this.state.initialElements.length;
+      initialElements.length &&
+      !this.state.initDone &&
+      !this.state.initialElements.length;
 
     // for first time add initialElements to droppedElements
     if (gotInitialItems) {
@@ -129,7 +129,7 @@ class Dropzone extends Component {
    * @param cb - {function}
    * @param dispatchElementRemove {Boolean} - trigger `removeElement` event if its true
    */
-  _removeElement = (elementID, cb = () => {}, dispatchElementRemove) => {
+  _removeElement = (elementID, cb = () => { }, dispatchElementRemove) => {
     const index = this.state.droppedElements.findIndex(e => e.id === elementID);
 
     this.setState({
@@ -142,7 +142,7 @@ class Dropzone extends Component {
    * @param newData - {element} - { id, name, type, payload }
    * @param cb - {function}
    */
-  _updateElement = (newData, cb = () => {}) => {
+  _updateElement = (newData, cb = () => { }) => {
     const elementIndex = this.state.droppedElements.findIndex(e => e.id === newData.id);
 
     if (elementIndex === -1) {
@@ -178,7 +178,7 @@ class Dropzone extends Component {
    * function will further call `updateState` from state API, which updates the application state
    * @param cb {function} - callback function - optional
    */
-  _updateState = (cb = () => {}, dispatchElementRemove) => {
+  _updateState = (cb = () => { }, dispatchElementRemove) => {
     const {
       id: dropzoneID,
       parentID
@@ -199,7 +199,7 @@ class Dropzone extends Component {
    * application state
    * @param cb {function} - callback function - optional
    */
-  _flushDroppedElements = (cb = () => {}) => {
+  _flushDroppedElements = (cb = () => { }) => {
     this.setState({
       initialElements: [],
       droppedElements: []
@@ -417,13 +417,13 @@ class Dropzone extends Component {
 
   render() {
     const { droppedElements } = this.state;
-    const { capacity, id, placeholder } = this.props;
+    const { capacity, id, placeholder, className } = this.props;
     const spaceAvailable = capacity ? capacity > droppedElements.length : true;
 
     return (
       <div
         ref={this.canvasRef}
-        className={`${!spaceAvailable ? 'no-space' : ''} ${id === 'root' ? 'canvas' : ''} ${!droppedElements.length ? 'empty' : ''} dropzone`}
+        className={`${className} ${!spaceAvailable ? 'no-space' : ''} ${id === 'root' ? 'canvas' : ''} ${!droppedElements.length ? 'empty' : ''} dropzone`}
         onDragOver={this._onDragOver}
         onDragLeave={this._onDragLeave}
         onDragEnter={this._onDragEnter}
